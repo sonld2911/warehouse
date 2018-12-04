@@ -1,0 +1,10 @@
+<h1 matDialogTitle>{{ 'COMMON.CONFIRM_DIALOG.TITLE' | translate }}</h1>
+<div mat-dialog-content>{{confirmMessage}}</div>
+<div mat-dialog-actions class="pt-24">
+    <button mat-raised-button class="mat-accent mr-16" (click)="dialogRef.close(true)">
+        {{ 'COMMON.CONFIRM_DIALOG.CONFIRM' | translate }}
+    </button>
+    <button mat-button (click)="dialogRef.close(false)">
+        {{ 'COMMON.CONFIRM_DIALOG.CANCEL' | translate }}
+    </button>
+</div>

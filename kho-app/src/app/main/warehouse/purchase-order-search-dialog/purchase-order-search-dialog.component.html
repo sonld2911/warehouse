@@ -1,0 +1,55 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ 'COMMON.TITLES.FORM_PURCHASE_ORDER_SEARCH' | translate }}</span>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <form [formGroup]="form" autocomplete="off" (submit)="save()">
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PURCHASE_ORDER.STATUS' | translate }}</mat-label>
+                    <mat-select name="status" formControlName="status">
+                        <mat-option *ngFor="let item of PURCHASE_ORDER_STATUS"
+                                    [value]="item.id">
+                            {{ item.translateKey | translate }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}</mat-label>
+                    <input matInput name="warehousingDates" formControlName="warehousingDates"
+                           ngxDaterangepickerMd
+                           [locale]="{format: 'DD/MM/YYYY', 'cancelLabel': 'Hủy', 'applyLabel': 'Chọn'}"
+                           drops="up">
+                </mat-form-field>
+            </div>
+
+            <button type="submit" class="d-none"></button>
+        </form>
+
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button mat-flat-button (click)="clear()">
+            {{ 'COMMON.BUTTONS.CLEAR_SEARCH' | translate }}
+        </button>
+
+        <button mat-flat-button
+                color="primary"
+                (click)="save()">
+            {{ 'COMMON.BUTTONS.SAVE_SEARCH' | translate }}
+        </button>
+
+    </div>
+</div>

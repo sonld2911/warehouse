@@ -1,0 +1,13 @@
+{
+    "apps": [
+        {
+            "name": "kho-api",
+            "script": "./dist/index.js",
+//            "watch": true,
+            "env_production": {
+                "PORT": 3000,
+                "APP_ENV": "production"
+            }
+        }
+    ]
+}
