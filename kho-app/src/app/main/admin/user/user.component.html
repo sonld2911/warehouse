@@ -1,0 +1,45 @@
+<div id="users" class="page-layout simple left-sidebar inner-sidebar inner-scroll">
+
+    <div class="header accent p-16 p-sm-24 mat-elevation-z4" fxLayout="column" fxLayoutAlign="start"
+         fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+            <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16"
+                          [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">account_box
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    {{ 'USER.TITLES.PAGE' | translate }}
+                </span>
+            </div>
+
+        </div>
+
+        <div class="ml-sm-32" fxLayout="row" fxLayoutAlign="center center" fxFlex>
+
+            <!--<div class="search-wrapper mt-16 mt-sm-0">
+
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input matInput placeholder="Search for a contact">
+                </div>
+
+            </div>-->
+
+        </div>
+
+        <button mat-flat-button color="primary" (click)="new()" *ngIf="loggedInUser?.isAdminRole">
+            {{ 'USER.NEW' | translate }}
+        </button>
+
+    </div>
+
+    <div class="content">
+        <div class="center p-24 pb-56" fusePerfectScrollbar>
+            <div class="content">
+                <users-user-list [dataSource]="dataSource"></users-user-list>
+            </div>
+        </div>
+    </div>
+</div>

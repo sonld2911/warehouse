@@ -1,0 +1,95 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-primary m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                <ng-container *ngIf="action === 'new'">
+                    {{ 'USER.FORM_NEW_TITLE' | translate }}
+                </ng-container>
+                <ng-container *ngIf="action === 'edit'">
+                    {{ 'USER.FORM_EDIT_TITLE' | translate }}
+                </ng-container>
+            </span>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <form [formGroup]="form" autocomplete="off">
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'USER.NAME' | translate }}</mat-label>
+                    <input name="name" formControlName="name" matInput required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'USER.USERNAME' | translate }}</mat-label>
+                    <input name="username" formControlName="username" matInput type="text" required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'USER.EMAIL' | translate }}</mat-label>
+                    <input name="email" formControlName="email" matInput type="email" required>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'USER.PASSWORD' | translate }}</mat-label>
+                    <input name="password" formControlName="password" matInput type="password" [required]="action === 'new'">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'USER.ROLE' | translate }}</mat-label>
+                    <mat-select name="role" formControlName="role" required>
+                        <mat-option *ngFor="let role of ROLE"
+                            [value]="role.id">
+                            {{ 'USER.ROLES.' + role.translateKey | translate }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'USER.WAREHOUSE' | translate }}</mat-label>
+                    <mat-select name="warehouseId" formControlName="warehouseId">
+                        <mat-option value=""></mat-option>
+                        <mat-option *ngFor="let warehouse of warehouses"
+                                    [value]="warehouse.id">
+                            {{ warehouse.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+
+        <button mat-flat-button
+                color="primary"
+                class="save-button"
+                (click)="save()"
+                [disabled]="form.invalid || loading || !form.dirty">
+            <ng-container *ngIf="action === 'edit'">
+                {{ 'USER.BUTTONS.ADD' | translate }}
+            </ng-container>
+            <ng-container *ngIf="action === 'new'">
+                {{ 'USER.BUTTONS.SAVE' | translate }}
+            </ng-container>
+        </button>
+
+    </div>
+</div>

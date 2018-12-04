@@ -1,0 +1,84 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-primary m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                <ng-container *ngIf="action === 'new'">
+                    {{ 'PRODUCTS.TITLES.NEW_FORM' | translate }}
+                </ng-container>
+                <ng-container *ngIf="action === 'edit'">
+                    {{ 'PRODUCTS.TITLES.EDIT_FORM' | translate }}
+                </ng-container>
+            </span>
+            <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <form [formGroup]="form" autocomplete="off" (submit)="save()">
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PRODUCT.CODE' | translate }}</mat-label>
+                    <input type="text" matInput name="code" formControlName="code" required>
+                    <mat-error *ngIf="form.get('code').hasError('required')">
+                        {{ 'VALIDATION.REQUIRED' | translate: { attribute: 'PRODUCT.CODE' | translate } }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PRODUCT.NAME' | translate }}</mat-label>
+                    <input type="text" matInput name="name" formControlName="name" required>
+                    <mat-error *ngIf="form.get('name').hasError('required')">
+                        {{ 'VALIDATION.REQUIRED' | translate: { attribute: 'PRODUCT.NAME' | translate } }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PRODUCT.DESCRIPTION' | translate }}</mat-label>
+                    <textarea matInput name="description" formControlName="description"></textarea>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PRODUCT.MACHINE_PART' | translate }}</mat-label>
+                    <input type="text" matInput name="machinePart" formControlName="machinePart">
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'PRODUCT.MANUFACTURER' | translate }}</mat-label>
+                    <input type="text" matInput name="manufacturer" formControlName="manufacturer">
+                </mat-form-field>
+            </div>
+
+            <button type="submit" [style.display]="'none'"></button>
+        </form>
+
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+
+        <button mat-flat-button
+                color="primary"
+                class="save-button"
+                (click)="save()"
+                [disabled]="form.invalid || loading || !form.dirty">
+            <ng-container *ngIf="action === 'edit'">
+                {{ 'PRODUCTS.BUTTONS.ADD' | translate }}
+            </ng-container>
+            <ng-container *ngIf="action === 'new'">
+                {{ 'PRODUCTS.BUTTONS.SAVE' | translate }}
+            </ng-container>
+        </button>
+
+    </div>
+</div>

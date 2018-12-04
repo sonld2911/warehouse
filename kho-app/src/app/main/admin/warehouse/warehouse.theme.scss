@@ -1,0 +1,29 @@
+@mixin warehouse-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $is-dark: map-get($theme, is-dark);
+
+    #warehouses {
+
+        .header {
+
+            .search-wrapper {
+                background: map-get($background, card);
+
+                .search {
+
+                    .mat-icon {
+                        color: map-get($foreground, icon);
+                    }
+
+                    input {
+                        background: map-get($background, card);
+                        color: map-get($foreground, text);
+                    }
+                }
+            }
+        }
+
+    }
+}

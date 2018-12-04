@@ -1,0 +1,43 @@
+<div class="table-container">
+    <app-loading-spinner></app-loading-spinner>
+
+    <mat-table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef>{{ 'WAREHOUSE.ID' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let warehouse">
+                <span class="text-truncate">
+                    {{ warehouse.id }}
+                </span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>{{ 'WAREHOUSE.NAME' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let warehouse">
+                {{ warehouse.name }}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let warehouse">
+                <button mat-icon-button color="accent" (click)="edit(warehouse)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete(warehouse)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="dataSource.count"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="onPageChanges($event)">
+    </mat-paginator>
+</div>

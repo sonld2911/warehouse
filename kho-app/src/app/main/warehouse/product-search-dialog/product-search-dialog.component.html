@@ -1,0 +1,64 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{ 'PRODUCT_SEARCH_DIALOG.PAGE_TITLE' | translate }}</span>
+            <button mat-icon-button (click)="matDialogRef.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <mat-form-field appearance="outline" class="w-100-p">
+            <mat-label>{{ 'PRODUCT_SEARCH_DIALOG.KEYWORD_LABEL' | translate }}</mat-label>
+            <input matInput name="code" [formControl]="searchInput" placeholder="{{ 'PRODUCT_SEARCH_DIALOG.KEYWORD_PLACEHOLDER' | translate }}">
+        </mat-form-field>
+
+        <table class="simple clickable">
+            <thead>
+            <tr>
+                <th class="text-center">{{ 'PRODUCT.CODE' | translate }}</th>
+                <th>{{ 'PRODUCT.NAME' | translate }}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let product of products">
+                <td class="text-center">{{product.code}}</td>
+                <td>{{product.name}}</td>
+                <td>
+                    <button mat-icon-button
+                            color="accent"
+                            matTooltip="{{ 'PRODUCT_SEARCH_DIALOG.BUTTONS.ADD' | translate }}"
+                            (click)="select(product)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </td>
+            </tr>
+            <tr *ngIf="products.length === 0">
+                <td colspan="3" class="text-center">
+                    {{ 'PRODUCT_SEARCH_DIALOG.EMPTY' | translate }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+
+
+        <!--<button mat-flat-button (click)="clear()">-->
+            <!--{{ 'COMMON.BUTTONS.CLEAR_SEARCH' | translate }}-->
+        <!--</button>-->
+
+        <!--<button mat-flat-button-->
+                <!--color="primary"-->
+                <!--(click)="save()">-->
+            <!--{{ 'COMMON.BUTTONS.SAVE_SEARCH' | translate }}-->
+        <!--</button>-->
+
+    </div>
+</div>

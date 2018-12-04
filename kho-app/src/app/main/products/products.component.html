@@ -1,0 +1,125 @@
+<div id="products-list" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    shopping_basket
+                </mat-icon>
+                <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    {{ 'PRODUCTS.TITLES.PAGE' | translate }}
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>search</mat-icon>
+                    <input fxFlex="1 1 100%"
+                           [formControl]="searchInput"
+                           placeholder="{{ 'PRODUCTS.MESSAGES.SEARCH_PLACEHOLDER' | translate }}">
+                </div>
+            </div>
+            <!-- / SEARCH -->
+
+            <!-- ADD BUTTON -->
+            <button mat-raised-button
+                    (click)="openCreateForm()"
+                    class="add-product-button fuse-white mt-24 mt-md-0">
+                <mat-icon>playlist_add</mat-icon>
+                <span>{{ 'PRODUCTS.BUTTONS.NEW' | translate }}</span>
+            </button>
+
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <mat-table class="products-table"
+                       #table [dataSource]="dataSource"
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PRODUCT.ID' | translate }}</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                        <span class="text-truncate">{{item.id}}</span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="code">
+                    <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PRODUCT.CODE' | translate }}</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                        {{item.code}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>{{ 'PRODUCT.NAME' | translate }}</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.name}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="manufacturer">
+                    <mat-header-cell *matHeaderCellDef>{{ 'PRODUCT.MANUFACTURER' | translate }}</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.manufacturer}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                        <button mat-icon-button
+                                color="accent"
+                                matTooltip="{{ 'COMMON.BUTTONS.EDIT' | translate }}"
+                                (click)="$event.stopPropagation(); openEditForm(item)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button
+                                color="warn"
+                                matTooltip="{{ 'COMMON.BUTTONS.DELETE' | translate }}"
+                                (click)="$event.stopPropagation(); openConfirmDeleteDialog(item)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let item; columns: displayedColumns;"
+                         class="product"
+                         matRipple>
+                </mat-row>
+
+            </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataSource?.total"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

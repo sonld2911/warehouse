@@ -1,0 +1,48 @@
+@import "src/@fuse/scss/fuse";
+
+#purchase-order {
+
+    .tab-content {
+
+        &.order-details {
+            table {
+                tbody {
+                    tr {
+                        td {
+                            &:first-child {
+                                font-weight: 700;
+                                text-transform: uppercase;
+                                width: 250px;
+                                text-align: right;
+                                color: rgba(0, 0, 0, .54);
+
+                                &:after {
+                                    font-weight: 400;
+                                    content: ':';
+                                    color: mat-color($mat-gray, 500);
+                                    margin-left: 2px;
+                                    margin-right: 10px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.products {
+            table {
+                thead {
+                    tr {
+                        th {
+                            text-transform: uppercase;
+                            font-weight: 700;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}

@@ -1,0 +1,28 @@
+<div id="profile" class="page-layout simple tabbed">
+
+    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+         fxLayoutAlign.gt-sm="space-between end">
+
+        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
+             fxLayoutAlign.gt-sm="start center">
+            <img class="profile-image avatar huge" src="assets/images/avatars/default-avatar.png"
+                 [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+            <div class="name" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                {{ user?.name }}
+            </div>
+        </div>
+
+        <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{value:'*',params:{delay:'200ms'}}">
+            <button mat-raised-button color="accent" (click)="showChangeProfileForm()">
+                <mat-icon>edit</mat-icon>
+                {{ 'USER.BUTTONS.CHANGE_PROFILE' | translate }}
+            </button>
+        </div>
+
+    </div>
+
+    <div class="content">
+
+    </div>
+
+</div>

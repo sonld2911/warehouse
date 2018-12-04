@@ -1,0 +1,18 @@
+@import "src/@fuse/scss/fuse";
+
+#warehouses {
+    .header {
+        min-height: 100px;
+    }
+
+    .content {
+        overflow: hidden;
+
+        > .center {
+            > .content {
+                border-radius: 8px;
+                @include mat-elevation(4);
+            }
+        }
+    }
+}

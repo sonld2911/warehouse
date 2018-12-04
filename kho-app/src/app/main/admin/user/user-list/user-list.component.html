@@ -1,0 +1,70 @@
+<div class="table-container">
+    <app-loading-spinner></app-loading-spinner>
+
+    <mat-table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef>{{ 'USER.ID' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let user">
+                <span class="text-truncate">
+                    {{ user.id }}
+                </span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>{{ 'USER.NAME' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let user">
+                {{ user.name }}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+            <mat-header-cell *matHeaderCellDef>{{ 'USER.ROLE' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let user">
+                <ng-container *ngIf="user.roleKey">
+                    {{ 'USER.ROLES.' + user.roleKey | translate }}
+                </ng-container>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="warehouse">
+            <mat-header-cell *matHeaderCellDef>{{ 'USER.WAREHOUSE' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let user">
+                <ng-container>
+                    {{ user?.warehouse?.name }}
+                </ng-container>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="joinedAt">
+            <mat-header-cell *matHeaderCellDef>{{ 'USER.JOINED_AT' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let user">
+                {{ user.joinedAt | date:'dd/MM/yyyy' }}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let user">
+                <ng-container *ngIf="loggedInUser?.isAdminRole">
+                    <button mat-icon-button color="accent" (click)="edit(user)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="delete(user)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </ng-container>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [length]="dataSource.count"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="onPageChanges($event)">
+    </mat-paginator>
+</div>

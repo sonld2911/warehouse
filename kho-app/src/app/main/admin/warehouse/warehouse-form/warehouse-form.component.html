@@ -1,0 +1,52 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-primary m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                <ng-container *ngIf="action === 'new'">
+                    {{ 'WAREHOUSE.TITLES.FORM_CREATE' | translate }}
+                </ng-container>
+                <ng-container *ngIf="action === 'edit'">
+                    {{ 'WAREHOUSE.TITLES.FORM_EDIT' | translate }}
+                </ng-container>
+            </span>
+            <button mat-icon-button (click)="matDialogRef.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+
+        <form [formGroup]="form" autocomplete="off">
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>{{ 'WAREHOUSE.NAME' | translate }}</mat-label>
+                    <input name="name" formControlName="name" matInput required>
+                    <mat-error *ngIf="form.get('name').hasError('required')">
+                        {{ 'VALIDATION.REQUIRED' | translate: {attribute: 'WAREHOUSE.NAME' | translate } }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+
+        <button mat-flat-button
+                color="primary"
+                class="save-button"
+                (click)="save()"
+                [disabled]="form.invalid || loading || !form.dirty">
+            <ng-container *ngIf="action === 'edit'">
+                {{ 'WAREHOUSE.BUTTONS.SAVE' | translate }}
+            </ng-container>
+            <ng-container *ngIf="action === 'new'">
+                {{ 'WAREHOUSE.BUTTONS.ADD' | translate }}
+            </ng-container>
+        </button>
+
+    </div>
+</div>

@@ -1,0 +1,44 @@
+// Import Fuse core library
+@import "@fuse/scss/core";
+
+// Import app.theme.scss
+@import "app/app.theme";
+
+// Workaround for https://github.com/angular/material2/issues/4580.
+mat-form-field .mat-form-field {
+    /*&-underline {
+        position: relative;
+        bottom: auto;
+    }*/
+    &-subscript-wrapper {
+        position: static;
+    }
+}
+
+.mat-form-field-appearance-outline {
+    .mat-form-field-wrapper {
+        .mat-form-field-subscript-wrapper {
+            padding: 0;
+        }
+    }
+}
+
+@import "~angular-notifier/styles";
+
+.notifier__container {
+    position: fixed;
+    z-index: 99999;
+}
+
+.md-drppicker {
+    font-family: mat-font-family($typography) !important;
+}
+
+input {
+    font-family: mat-font-family($typography) !important;
+}
+
+
+.d-none {
+    display: none;
+}

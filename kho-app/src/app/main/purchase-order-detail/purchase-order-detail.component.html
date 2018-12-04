@@ -1,0 +1,184 @@
+<div id="purchase-order" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent"
+             fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button mat-icon-button class="mr-16" routerLink="/warehouse/{{viewPath}}">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        {{ 'PURCHASE_ORDER.TITLES.ORDER_DETAIL' | translate }}
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <ng-container *ngIf="(this.data$ | async) as data">
+
+                    <mat-tab-group fxLayout="column" fxFlex>
+
+                        <mat-tab label="{{ 'PURCHASE_ORDER.TABS.BASIC_INFO' | translate }}">
+                            <div class="order-details tab-content p-24" fusePerfectScrollbar>
+                                <table class="simple">
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.ID' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.SUBTOTAL' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.subtotal | currency:'VND' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.STATUS' | translate }}</td>
+                                        <td fxLayoutAlign="start center">
+                                            <ng-container *ngIf="data.purchaseOrder.isStatusPending">
+                                                <mat-icon class="orange-500-fg mr-4">access_time</mat-icon>
+                                                <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate }}</span>
+                                            </ng-container>
+                                            <ng-container *ngIf="data.purchaseOrder.isStatusAccepted">
+                                                <mat-icon class="green-500-fg mr-4">check_circle</mat-icon>
+                                                <span class="green-500-fg">{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate }}</span>
+                                            </ng-container>
+                                            <ng-container *ngIf="data.purchaseOrder.isStatusRejected">
+                                                <mat-icon class="red-500-fg mr-4">block</mat-icon>
+                                                <span class="red-500-fg">{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate }}</span>
+                                            </ng-container>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.AREAS' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.areas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.LOCATION' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.location }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.managerDepartment }}</td>
+                                    </tr>
+                                    <tr *ngIf="viewPath === 'import'">
+                                        <td>{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.inputDate | date:'dd/MM/yyyy' }}</td>
+                                    </tr>
+                                    <tr *ngIf="viewPath === 'export'">
+                                        <td>{{ 'PURCHASE_ORDER.OUTPUT_DATE' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.outputDate | date:'dd/MM/yyyy' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.CREATED_BY' | translate }}</td>
+                                        <td>
+                                            {{ data.createdBy?.name }}
+                                            <span class="secondary-text">({{data.createdBy?.username}})</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.UPDATED_BY' | translate }}</td>
+                                        <td>
+                                            <ng-container *ngIf="data.updatedBy; else empty">
+                                                {{ data.updatedBy?.name }}
+                                                <span class="secondary-text">({{data.updatedBy?.username}})</span>
+                                            </ng-container>
+
+                                            <ng-template #empty>
+                                                ...
+                                            </ng-template>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.CREATED_AT' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'PURCHASE_ORDER.UPDATED_AT' | translate }}</td>
+                                        <td>{{ data.purchaseOrder?.updatedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab label="{{ 'PURCHASE_ORDER.TABS.PRODUCTS' | translate }}">
+                            <div class="products tab-content p-24" fusePerfectScrollbar>
+                                <table class="simple">
+                                    <thead>
+                                    <tr>
+                                        <th class="w-140 text-center">{{ 'PRODUCT.CODE' | translate }}</th>
+                                        <th>{{ 'PRODUCT.NAME' | translate }}</th>
+                                        <th class="w-120 text-center">{{ 'PRODUCT.PRICE' | translate }}</th>
+                                        <th class="w-100 text-center">{{ 'PRODUCT.QUANTITY' | translate }}</th>
+                                        <th class="w-120 text-center">{{ 'PRODUCT.AMOUNT' | translate }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ng-container *ngIf="data.purchaseOrder?.products?.length > 0; else noProduct">
+                                        <tr class="product-row"
+                                            *ngFor="let item of data.purchaseOrder?.products">
+                                            <td class="text-center">
+                                                {{item.product?.code}}
+                                            </td>
+                                            <td>
+                                                {{item.product.name}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{item.price | currency:'VND'}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{item.quantity}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{item.amount | currency:'VND'}}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                    <ng-template #noProduct>
+                                        <tr>
+                                            <td colspan="10" class="text-center">
+                                                <p class="h2">{{ 'PURCHASE_ORDER.MESSAGES.EMPTY_PRODUCT' | translate }}</p>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </mat-tab>
+
+                    </mat-tab-group>
+
+                </ng-container>
+
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>
