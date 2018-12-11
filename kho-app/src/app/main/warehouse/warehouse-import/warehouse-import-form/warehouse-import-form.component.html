@@ -8,8 +8,7 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header accent"
-             fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
 
             <!-- APP TITLE -->
             <div fxLayout="row" fxLayoutAlign="start center">
@@ -18,8 +17,7 @@
                     <mat-icon>arrow_back</mat-icon>
                 </button>
 
-                <div fxLayout="column" fxLayoutAlign="start start"
-                     [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                <div fxLayout="column" fxLayoutAlign="start start" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div class="h2">
                         <ng-container *ngIf="viewPath === 'import'">
                             {{ 'PURCHASE_ORDER.TITLES.FORM_IMPORT' | translate }}
@@ -58,36 +56,28 @@
 
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>{{ 'PURCHASE_ORDER.AREAS' | translate }}</mat-label>
-                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.AREAS' | translate }}"
-                                           name="areas"
-                                           formControlName="areas"
-                                           required>
+                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.AREAS' | translate }}" name="areas"
+                                        formControlName="areas" required>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>{{ 'PURCHASE_ORDER.LOCATION' | translate }}</mat-label>
-                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.LOCATION' | translate }}"
-                                           name="location"
-                                           formControlName="location"
-                                           required>
+                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.LOCATION' | translate }}" name="location"
+                                        formControlName="location" required>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</mat-label>
                                     <input matInput placeholder="{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}"
-                                           name="managerDepartment"
-                                           formControlName="managerDepartment"
-                                           required>
+                                        name="managerDepartment" formControlName="managerDepartment" required>
                                 </mat-form-field>
 
                                 <ng-container *ngIf="viewPath === 'import'">
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                         <mat-label>{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}</mat-label>
                                         <input matInput placeholder="{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}"
-                                               name="inputDate"
-                                               formControlName="inputDate"
-                                               [matDatepicker]="picker"
-                                               required>
+                                            name="inputDate" formControlName="inputDate" [matDatepicker]="picker"
+                                            required>
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
@@ -97,14 +87,24 @@
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                         <mat-label>{{ 'PURCHASE_ORDER.OUTPUT_DATE' | translate }}</mat-label>
                                         <input matInput placeholder="{{ 'PURCHASE_ORDER.OUTPUT_DATE' | translate }}"
-                                               name="outputDate"
-                                               formControlName="outputDate"
-                                               [matDatepicker]="pickerOutputDate"
-                                               required>
+                                            name="outputDate" formControlName="outputDate" [matDatepicker]="pickerOutputDate"
+                                            required>
                                         <mat-datepicker-toggle matSuffix [for]="pickerOutputDate"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerOutputDate></mat-datepicker>
                                     </mat-form-field>
                                 </ng-container>
+
+                                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                    <mat-label>{{ 'PURCHASE_ORDER.TITLES.APPROVER' | translate }}</mat-label>
+                                    <!-- <input matInput placeholder="{{ 'PURCHASE_ORDER.TITLES.APPROVER' | translate }}"
+                                        name="managerDepartment" formControlName="managerDepartment" required> -->
+                                        <mat-select [(value)]="selected" required>
+                                            <mat-option value="volvo" seleted>Volvo</mat-option>
+                                            <mat-option value="saab">Saab</mat-option>
+                                            <mat-option value="mercedes">Mercedes</mat-option>
+                                            <mat-option value="audi">Audi</mat-option>
+                                        </mat-select>
+                                </mat-form-field>
 
                             </div>
 
@@ -113,71 +113,62 @@
                         <mat-tab label="{{ 'PURCHASE_ORDER.TABS.PRODUCTS' | translate }}">
                             <div class="products tab-content p-24" fusePerfectScrollbar>
 
-                                <button mat-flat-button color="primary"
-                                        (click)="openSearchProductDialog()">
+                                <button mat-flat-button color="primary" (click)="openSearchProductDialog()">
                                     {{ 'PURCHASE_ORDER.BUTTONS.ADD_PRODUCT' | translate }}
                                 </button>
 
                                 <table class="simple">
                                     <thead>
-                                    <tr>
-                                        <th class="w-140 text-center">{{ 'PRODUCT.CODE' | translate }}</th>
-                                        <th>{{ 'PRODUCT.NAME' | translate }}</th>
-                                        <th class="w-180">{{ 'PRODUCT.PRODUCT_TYPE' | translate }}</th>
-                                        <th class="w-140">{{ 'PRODUCT.PRICE' | translate }}</th>
-                                        <th class="w-140">{{ 'PRODUCT.QUANTITY' | translate }}</th>
-                                        <th></th>
-                                    </tr>
+                                        <tr>
+                                            <th class="w-140 text-center">{{ 'PRODUCT.CODE' | translate }}</th>
+                                            <th>{{ 'PRODUCT.NAME' | translate }}</th>
+                                            <th class="w-180">{{ 'PRODUCT.PRODUCT_TYPE' | translate }}</th>
+                                            <th class="w-140">{{ 'PRODUCT.PRICE' | translate }}</th>
+                                            <th class="w-140">{{ 'PRODUCT.QUANTITY' | translate }}</th>
+                                            <th></th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="product-row"
-                                        *ngFor="let product of form.get('products').controls; let i = index"
-                                        [formGroup]="product">
-                                        <td class="text-center">
-                                            {{purchaseOrder.products[i]?.product?.code}}
-                                        </td>
-                                        <td>
-                                            {{purchaseOrder.products[i]?.product?.name}}
-                                        </td>
-                                        <td>
-                                            <mat-form-field floatLabel="never" class="w-100-p">
-                                                <mat-label>{{ 'PRODUCT.PRODUCT_TYPE' | translate }}</mat-label>
-                                                <mat-select placeholder="{{ 'PRODUCT.PRODUCT_TYPE' | translate }}"
-                                                            name="productType"
-                                                            formControlName="productType"
-                                                            required>
-                                                    <mat-option *ngFor="let item of PRODUCT_TYPES"
-                                                                [value]="item.id">
-                                                        {{ 'PRODUCT.TYPES.' + item.translateKey | translate }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
+                                        <tr class="product-row" *ngFor="let product of form.get('products').controls; let i = index"
+                                            [formGroup]="product">
+                                            <td class="text-center">
+                                                {{purchaseOrder.products[i]?.product?.code}}
+                                            </td>
+                                            <td>
+                                                {{purchaseOrder.products[i]?.product?.name}}
+                                            </td>
+                                            <td>
+                                                <mat-form-field floatLabel="never" class="w-100-p">
+                                                    <mat-label>{{ 'PRODUCT.PRODUCT_TYPE' | translate }}</mat-label>
+                                                    <mat-select placeholder="{{ 'PRODUCT.PRODUCT_TYPE' | translate }}"
+                                                        name="productType" formControlName="productType" required>
+                                                        <mat-option *ngFor="let item of PRODUCT_TYPES" [value]="item.id">
+                                                            {{ 'PRODUCT.TYPES.' + item.translateKey | translate }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
 
-                                        </td>
-                                        <td class="w-140">
-                                            <mat-form-field floatLabel="never" class="w-100-p">
-                                                <mat-label>{{ 'PRODUCT.PRICE' | translate }}</mat-label>
-                                                <input matInput placeholder="{{ 'PRODUCT.PRICE' | translate }}"
-                                                       name="price"
-                                                       formControlName="price"
-                                                       required>
-                                            </mat-form-field>
-                                        </td>
-                                        <td class="w-140">
-                                            <mat-form-field floatLabel="never" class="w-100-p">
-                                                <mat-label>{{ 'PRODUCT.QUANTITY' | translate }}</mat-label>
-                                                <input matInput placeholder="{{ 'PRODUCT.QUANTITY' | translate }}"
-                                                       name="quantity"
-                                                       formControlName="quantity"
-                                                       required>
-                                            </mat-form-field>
-                                        </td>
-                                        <td class="text-center">
-                                            <button mat-icon-button color="warn" (click)="removeProduct(i)">
-                                                <mat-icon>close</mat-icon>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td class="w-140">
+                                                <mat-form-field floatLabel="never" class="w-100-p">
+                                                    <mat-label>{{ 'PRODUCT.PRICE' | translate }}</mat-label>
+                                                    <input matInput placeholder="{{ 'PRODUCT.PRICE' | translate }}"
+                                                        name="price" formControlName="price" required>
+                                                </mat-form-field>
+                                            </td>
+                                            <td class="w-140">
+                                                <mat-form-field floatLabel="never" class="w-100-p">
+                                                    <mat-label>{{ 'PRODUCT.QUANTITY' | translate }}</mat-label>
+                                                    <input matInput placeholder="{{ 'PRODUCT.QUANTITY' | translate }}"
+                                                        name="quantity" formControlName="quantity" required>
+                                                </mat-form-field>
+                                            </td>
+                                            <td class="text-center">
+                                                <button mat-icon-button color="warn" (click)="removeProduct(i)">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
