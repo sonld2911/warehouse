@@ -51,19 +51,21 @@ async function find(req, res, next) {
         return next(err);
     }
 }
-
-async function findOne(req, res, next) {
-    const { PurchaseOrder } = req.app.get('models');
-    const { id } = req.params;
+async function sendNotification(data, to="notifications"){
     let Pusher = require('pusher');
-            let pusher = new Pusher({
-                appId: "665345",
-                key: "32f3c61f78d9f66b2d26",
-                secret: "77a38bfba30ee9b1ff85",
-                cluster: "ap1"
-            });
+    let pusher = new Pusher({
+        appId: "665345",
+        key: "32f3c61f78d9f66b2d26",
+        secret: "77a38bfba30ee9b1ff85",
+        cluster: "ap1"
+    });
 
-            pusher.trigger('notifications', 'post_updated', {id: 1});
+    pusher.trigger(to, 'post_updated',data);
+}
+async function findOne(req, res, next) {
+    const { PurchaseOrder, User } = req.app.get('models');
+    const { id } = req.params;
+    const user = req.user;
     try {
         const item = await PurchaseOrder
             .findById(id)
@@ -72,7 +74,9 @@ async function findOne(req, res, next) {
         if (!item) {
             return next('error 404 product not found');
         }
-
+        const user_kho = await User.findByRoleAndWarehouseId("stocker",user.warehouseId);
+        // TODO: handle response format
+        sendNotification(user_kho);
         return res.json(item);
     } catch (err) {
         // TODO: handle error
@@ -81,17 +85,17 @@ async function findOne(req, res, next) {
 }
 
 async function create(req, res, next) {
-    const { PurchaseOrder } = req.app.get('models');
+    const { PurchaseOrder, User } = req.app.get('models');
     const user = req.user;
 
     const data = req.body;
     data.warehouseId = user.warehouseId;
     data.createdBy = user.id;
-
     try {
         const purchaseOrder = await PurchaseOrder.create(data);
-
+        const user_kho = await User.findByRoleAndWarehouseId("stocker",user.warehouseId);
         // TODO: handle response format
+        sendNotification(user_kho);
         return res.json(purchaseOrder);
     } catch (err) {
         // TODO: validate write error
