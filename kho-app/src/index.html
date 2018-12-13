@@ -17,7 +17,7 @@
         <link href="assets/icons/meteocons/style.css" rel="stylesheet">
         <link href="assets/icons/material-icons/outline/style.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700" rel="stylesheet">
-
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <!-- FUSE Splash Screen CSS -->
         <style type="text/css">
             #fuse-splash-screen {
@@ -215,7 +215,31 @@
         <!-- / FUSE Splash Screen -->
 
         <app></app>
+        <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+<script>
+    var pusher = new Pusher('32f3c61f78d9f66b2d26',{cluster: 'ap1',forceTLS: true});
 
+    // retrieve the socket ID once we're connected
+    pusher.connection.bind('connected', function () {
+        // attach the socket ID to all outgoing Axios requests
+        axios.defaults.headers.common['X-Socket-Id'] = pusher.connection.socket_id;
+        console.log("socketID: ", pusher.connection.socket_id);
+    });
+    Notification.requestPermission();
+    pusher.subscribe('notifications')
+            .bind('post_updated', function (post) {
+                var notification = new Notification("trung đang gửi notification",
+                {
+                    icon: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png',
+                    body: "Hey there! You've been notified!",
+                });
+                notification.onclick = function (event) {
+                    window.location.href = '/posts/' + post._id;
+                    event.preventDefault();
+                    notification.close();
+                }
+            });
+</script>
     </body>
 
 </html>

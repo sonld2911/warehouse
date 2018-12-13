@@ -55,7 +55,15 @@ async function find(req, res, next) {
 async function findOne(req, res, next) {
     const { PurchaseOrder } = req.app.get('models');
     const { id } = req.params;
+    let Pusher = require('pusher');
+            let pusher = new Pusher({
+                appId: "665345",
+                key: "32f3c61f78d9f66b2d26",
+                secret: "77a38bfba30ee9b1ff85",
+                cluster: "ap1"
+            });
 
+            pusher.trigger('notifications', 'post_updated', {id: 1});
     try {
         const item = await PurchaseOrder
             .findById(id)
@@ -131,12 +139,26 @@ async function remove(req, res, next) {
     }
 }
 
+async function invoiceApproval(req, res, next) {
+    const { PurchaseOrder } = req.app.get('models');
+    const { id } = req.params;
+
+    try {
+        await PurchaseOrder.findByIdAndDelete(id);
+
+        return res.status(204).json({});
+    } catch (err) {
+        return next(err);
+    }
+}
+
 const PurchaseOrderController = {
     find,
     findOne,
     create,
     update,
     remove,
+    invoiceApproval,
 };
 
 export {
