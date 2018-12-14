@@ -92,7 +92,8 @@ export class LoginComponent implements OnInit {
                     this.auth.user = user;
                     this.loginForm.disable();
                     this.loginSuccess = true;
-                    localStorage.setItem('key', 'value');
+                    localStorage.setItem('key', user.username);
+                    console.log(user);
                     setTimeout(() => {
                         this.router.navigate(['/dashboard']);
                     }, 1000);
