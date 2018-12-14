@@ -98,7 +98,7 @@ async function create(req, res, next) {
             badge: badge,
             title: " ban co 1 tin moi",
             body: 'than bai'
-        })});
+        }, user.username)});
         return res.json(purchaseOrder);
     } catch (err) {
         // TODO: validate write error
