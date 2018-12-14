@@ -98,6 +98,9 @@ UserSchema.statics.findByEmail = function findByEmail(email) {
 UserSchema.statics.findByUsername = function findByUsername(username) {
     return this.findOne({ username });
 };
+UserSchema.statics.findByRoleAndWarehouseId = function findBytrungtn(role, warehouseId) {
+    return this.find({role: role, warehouseId:warehouseId});
+};
 
 UserSchema.set('toJSON', {
     transform: function (doc, ret) {

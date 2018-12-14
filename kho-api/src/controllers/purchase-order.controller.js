@@ -3,6 +3,7 @@
 import { get, omitBy, isNil, sumBy } from 'lodash';
 
 import { DEFAULT_PAGE_LIMIT } from '../enums';
+import { now } from 'moment';
 
 async function find(req, res, next) {
     const { PurchaseOrder } = req.app.get('models');
@@ -51,19 +52,20 @@ async function find(req, res, next) {
         return next(err);
     }
 }
+async function sendNotification(data, to="notifications"){
+    let Pusher = require('pusher');
+    let pusher = new Pusher({
+        appId: "665345",
+        key: "32f3c61f78d9f66b2d26",
+        secret: "77a38bfba30ee9b1ff85",
+        cluster: "ap1"
+    });
 
+    pusher.trigger(to, 'post_updated',data);
+}
 async function findOne(req, res, next) {
     const { PurchaseOrder } = req.app.get('models');
     const { id } = req.params;
-    let Pusher = require('pusher');
-            let pusher = new Pusher({
-                appId: "665345",
-                key: "32f3c61f78d9f66b2d26",
-                secret: "77a38bfba30ee9b1ff85",
-                cluster: "ap1"
-            });
-
-            pusher.trigger('notifications', 'post_updated', {id: 1});
     try {
         const item = await PurchaseOrder
             .findById(id)
@@ -72,7 +74,6 @@ async function findOne(req, res, next) {
         if (!item) {
             return next('error 404 product not found');
         }
-
         return res.json(item);
     } catch (err) {
         // TODO: handle error
@@ -81,17 +82,23 @@ async function findOne(req, res, next) {
 }
 
 async function create(req, res, next) {
-    const { PurchaseOrder } = req.app.get('models');
+    const { PurchaseOrder, User } = req.app.get('models');
     const user = req.user;
 
     const data = req.body;
     data.warehouseId = user.warehouseId;
     data.createdBy = user.id;
-
     try {
         const purchaseOrder = await PurchaseOrder.create(data);
-
+        const user_kho = await User.findByRoleAndWarehouseId("stocker",user.warehouseId);
+        const badge = await PurchaseOrder.find({'status': 'pending'}).count();
         // TODO: handle response format
+        user_kho.map((user)=>{sendNotification({
+            purchaseOrderId: purchaseOrder.id,
+            badge: badge,
+            title: " ban co 1 tin moi",
+            body: 'than bai'
+        })});
         return res.json(purchaseOrder);
     } catch (err) {
         // TODO: validate write error
@@ -142,11 +149,16 @@ async function remove(req, res, next) {
 async function invoiceApproval(req, res, next) {
     const { PurchaseOrder } = req.app.get('models');
     const { id } = req.params;
-
+    const user = req.user;
+    const status = get(req.query, 'status', false);
     try {
-        await PurchaseOrder.findByIdAndDelete(id);
-
-        return res.status(204).json({});
+        await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
+            {
+                status: status?"accepted":"rejected",
+                 updatedBy: user.id
+            });
+        console.log(req.query);
+        return res.status(204).json({status: status, name: "trungtn"});
     } catch (err) {
         return next(err);
     }

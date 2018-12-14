@@ -19,6 +19,9 @@ import { TranslateService } from '@ngx-translate/core';
     animations: fuseAnimations,
 })
 export class LoginComponent implements OnInit {
+    Pusher = require('pusher-js');
+    axios = require('axios');
+
     loginForm: FormGroup;
 
     loading: boolean;
@@ -93,7 +96,8 @@ export class LoginComponent implements OnInit {
                     this.loginForm.disable();
                     this.loginSuccess = true;
                     localStorage.setItem('key', user.username);
-                    console.log(user);
+                    const name = localStorage.getItem('name');
+                    console.log(name);
                     setTimeout(() => {
                         this.router.navigate(['/dashboard']);
                     }, 1000);
@@ -102,5 +106,29 @@ export class LoginComponent implements OnInit {
                     this.loginError = true;
                 },
             );
+    }
+    notificatio (): void {
+        const pusher = new this.Pusher('32f3c61f78d9f66b2d26', { cluster: 'ap1', forceTLS: true});
+
+        // retrieve the socket ID once we're connected
+        pusher.connection.bind('connected', function (): void  {
+            // attach the socket ID to all outgoing Axios requests
+            this.axios.defaults.headers.common['X-Socket-Id'] = pusher.connection.socket_id;
+            console.log('socketID: ', pusher.connection.socket_id);
+        });
+        Notification.requestPermission();
+        pusher.subscribe('notifications')
+                .bind('post_updated', function (post): void {
+                    const notification = new Notification('trung đang gửi notification',
+                    {
+                        icon: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png',
+                        body: 'Hey there! You ve been notified!',
+                    });
+                    notification.onclick = function (event): void {
+                        window.location.href = '/posts/' + post._id;
+                        event.preventDefault();
+                        notification.close();
+                    };
+                });
     }
 }
