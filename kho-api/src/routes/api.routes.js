@@ -37,6 +37,7 @@ routes.get('/purchase-orders/:id', PurchaseOrderController.findOne);
 routes.post('/purchase-orders', PurchaseOrderController.create);
 routes.patch('/purchase-orders/:id', PurchaseOrderController.update);
 routes.delete('/purchase-orders/:id', PurchaseOrderController.remove);
+routes.patch('/purchase-orders/invoice-approval/:id', PurchaseOrderController.invoiceApproval);
 
 /*routes.post('/avatars',
     authenticate(),
