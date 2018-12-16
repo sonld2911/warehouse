@@ -154,7 +154,8 @@ async function invoiceApproval(req, res, next) {
     const status = get(req.query, 'status', false);
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
-        if (!item && item.status == "pending") return next('error 404 product not found');
+        console.log("trungtn");
+        if (!item || item.status != "pending") return res.status(404).json({});
         if(status){
             item.products.map( async (product)=>{
                 let statistical = product.product.statistical;
@@ -162,7 +163,7 @@ async function invoiceApproval(req, res, next) {
                     statistical[product.productType]+=product.quantity;
                 else{
                     let caculate = statistical[product.productType] - product.quantity;
-                    if(caculate<0) return res.status(400);
+                    if(caculate<0) return res.status(400).json({});
                     statistical[product.productType]-=product.quantity;
                 }
                 await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
