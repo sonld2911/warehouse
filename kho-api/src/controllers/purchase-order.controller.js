@@ -154,7 +154,7 @@ async function invoiceApproval(req, res, next) {
     const status = get(req.query, 'status', false);
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
-        if (!item) return next('error 404 product not found');
+        if (!item && item.status == "pending") return next('error 404 product not found');
         if(status){
             item.products.map( async (product)=>{
                 let statistical = product.product.statistical;
