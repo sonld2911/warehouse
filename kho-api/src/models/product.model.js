@@ -37,6 +37,26 @@ const ProductSchema = new mongoose.Schema({
         ref: 'Warehouse',
         required: false,
     },
+    statistical: {
+        new: {
+            type: Number,
+            min: 0,
+            default: 0,
+            required: true,
+        },
+        recovery: {
+            type: Number,
+            min: 0,
+            default: 0,
+            required: true,
+        },
+        guarantee:  {
+            type: Number,
+            min: 0,
+            default: 0,
+            required: true,
+        },
+    },
 }, { timestamps: true });
 
 ProductSchema.plugin(mongoosePaginatePlugin);

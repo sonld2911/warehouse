@@ -71,6 +71,7 @@ async function create(req, res, next) {
 
         // TODO:
         data.warehouseId = user.warehouseId;
+        data.statistical = {new: 0, recovery: 0, guarantee: 0};
 
         const product = await Product.create(data);
 
