@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
 import { AuthenticationService } from '@shared/modules/authentication';
 import { Subject } from 'rxjs';
-import { User } from '@shared/models';
+import { User,Product } from '@shared/models';
 import { takeUntil } from 'rxjs/operators';
-import { MatDialog } from '@angular/material';
+import { MatDialog,MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ChangeProfileFormComponent } from '@app/main/dashboard/change-profile-form/change-profile-form.component';
+import { ProductService } from '@app/shared/services/product.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -18,9 +19,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private unsubscribeAll: Subject<any>;
 
     public user: User;
+    public product: Product;
+    public displayedColumns: string[] = [
+        'id',
+        'code',
+        'name',
+        'manufacturer',
+        'machinePart',
+        'description',
+        'guarantee',
+        'new',
+        'recovery',
+    ];
 
     constructor(
         private auth: AuthenticationService,
+        private productService: ProductService,
         private matDialog: MatDialog,
     ) {
         this.unsubscribeAll = new Subject<any>();
@@ -32,6 +46,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             .subscribe((user: User) => {
                 this.user = user;
             });
+        this.productService.find({}).subscribe((response: any)=>{
+            this.product = response.items
+        });
     }
 
     ngOnDestroy(): void {

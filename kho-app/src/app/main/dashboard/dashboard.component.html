@@ -1,12 +1,9 @@
 <div id="profile" class="page-layout simple tabbed">
 
-    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-         fxLayoutAlign.gt-sm="space-between end">
+    <div class="header p-24" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between end">
 
-        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-             fxLayoutAlign.gt-sm="start center">
-            <img class="profile-image avatar huge" src="assets/images/avatars/default-avatar.png"
-                 [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+        <div class="user-info" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="start center">
+            <img class="profile-image avatar huge" src="assets/images/avatars/default-avatar.png" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
             <div class="name" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                 {{ user?.name }}
             </div>
@@ -20,9 +17,295 @@
         </div>
 
     </div>
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Thống kê đơn hàng">
+            <h1 class="widget-group custom" fxLayout="row">Thống kê đơn nhập kho</h1>
+            <div class="content">
 
-    <div class="content">
+                <div class="widget-group p-12 height" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom [@animateStagger]="{value:'50'}">
 
-    </div>
+                    <!-- WIDGET 1 -->
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
-</div>
+                        <!-- Front -->
+                        <div class="fuse-widget-front">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h3">Số lượng đơn được duyệt</div>
+                                <mat-icon class="fuse-widget-flip-button" aria-label="more" class="green-fg">check_circle_outline
+                                </mat-icon>
+
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="green-fg font-size-72 line-height-72">
+                                    2
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">
+                                    Đơn hàng
+                                </div>
+                            </div>
+
+                            <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                                <span class="h4 secondary-text text-truncate">
+                                    Tổng số đơn nhập kho:
+                                </span>
+                                <span class="h4 ml-8">
+                                    5
+                                </span>
+                            </div>
+                        </div>
+                        <!-- / Front -->
+
+
+                    </fuse-widget>
+
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+
+                        <!-- Front -->
+                        <div class="fuse-widget-front">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h3">Số lượng đơn chưa được duyệt</div>
+                                <mat-icon class="fuse-widget-flip-button" aria-label="more" class="orange-fg">access_time
+                                </mat-icon>
+
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="orange-fg font-size-72 line-height-72">
+                                    3
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">
+                                    Đơn hàng
+                                </div>
+                            </div>
+
+                            <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                                <span class="h4 secondary-text text-truncate">
+                                    Tổng số đơn nhập kho:
+                                </span>
+                                <span class="h4 ml-8">
+                                    5
+                                </span>
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+
+                        <!-- Front -->
+                        <div class="fuse-widget-front">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h3">Số lượng đơn bị hủy</div>
+                                <mat-icon class="fuse-widget-flip-button" aria-label="more" class="red-fg">highlight_off
+                                </mat-icon>
+
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="red-fg font-size-72 line-height-72">
+                                    0
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">
+                                    Đơn hàng
+                                </div>
+                            </div>
+
+                            <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                                <span class="h4 secondary-text text-truncate">
+                                    Tổng số đơn nhập kho:
+                                </span>
+                                <span class="h4 ml-8">
+                                    5
+                                </span>
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+                </div>
+
+
+            </div>
+            <h1 class="widget-group custom" fxLayout="row">Thống kê đơn xuất kho</h1>
+            <div class="content">
+
+                <div class="widget-group p-12 height" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom [@animateStagger]="{value:'50'}">
+
+                    <!-- WIDGET 1 -->
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+
+                        <!-- Front -->
+                        <div class="fuse-widget-front">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h3">Số lượng đơn được duyệt</div>
+                                <mat-icon class="fuse-widget-flip-button" aria-label="more" class="green-fg">check_circle_outline
+                                </mat-icon>
+
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="green-fg font-size-72 line-height-72">
+                                    2
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">
+                                    Đơn hàng
+                                </div>
+                            </div>
+
+                            <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                                <span class="h4 secondary-text text-truncate">
+                                    Tổng số đơn nhập kho:
+                                </span>
+                                <span class="h4 ml-8">
+                                    5
+                                </span>
+                            </div>
+                        </div>
+                        <!-- / Front -->
+
+
+                    </fuse-widget>
+
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+
+                        <!-- Front -->
+                        <div class="fuse-widget-front">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h3">Số lượng đơn chưa được duyệt</div>
+                                <mat-icon class="fuse-widget-flip-button" aria-label="more" class="orange-fg">access_time
+                                </mat-icon>
+
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="orange-fg font-size-72 line-height-72">
+                                    3
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">
+                                    Đơn hàng
+                                </div>
+                            </div>
+
+                            <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                                <span class="h4 secondary-text text-truncate">
+                                    Tổng số đơn nhập kho:
+                                </span>
+                                <span class="h4 ml-8">
+                                    5
+                                </span>
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+
+                        <!-- Front -->
+                        <div class="fuse-widget-front">
+                            <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+                                <div class="h3">Số lượng đơn bị hủy</div>
+                                <mat-icon class="fuse-widget-flip-button" aria-label="more" class="red-fg">highlight_off
+                                </mat-icon>
+
+                            </div>
+
+                            <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+                                <div class="red-fg font-size-72 line-height-72">
+                                    0
+                                </div>
+                                <div class="h3 secondary-text font-weight-500">
+                                    Đơn hàng
+                                </div>
+                            </div>
+
+                            <div class="p-16 border-top" fxLayout="row" fxLayoutAlign="start center">
+                                <span class="h4 secondary-text text-truncate">
+                                    Tổng số đơn nhập kho:
+                                </span>
+                                <span class="h4 ml-8">
+                                    5
+                                </span>
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Thống kê vật liệu">
+            <mat-table class="products-table"
+                       #table [dataSource]="product"
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">ID</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                        <span class="text-truncate">{{item.id}}</span>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="code">
+                    <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">Mã vật tư</mat-header-cell>
+                    <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                        {{item.code}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>Tên vật tư</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.name}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="manufacturer">
+                    <mat-header-cell *matHeaderCellDef>Nhà sản xuất</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.name}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="machinePart">
+                    <mat-header-cell *matHeaderCellDef>Thiết bị sử dụng</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.name}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef>Miêu tả</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.name}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="guarantee">
+                    <mat-header-cell *matHeaderCellDef>Vật tư bảo hành</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.statistical.guarantee}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="new">
+                    <mat-header-cell *matHeaderCellDef>Vật tư mới</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.statistical.new}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="recovery">
+                    <mat-header-cell *matHeaderCellDef>Vật tư phục hồi</mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                        {{item.statistical.recovery}}
+                    </mat-cell>
+                </ng-container>
+
+                
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+                <mat-row *matRowDef="let item; columns: displayedColumns;"
+                         class="product"
+                         matRipple>
+                </mat-row>
+
+            </mat-table>
+        </mat-tab>
+    </mat-tab-group>

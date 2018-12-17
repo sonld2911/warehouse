@@ -69,6 +69,7 @@ export class ProductsDataSource extends DataSource<any> {
                 }),
             )
             .subscribe((response: any) => {
+                console.log(response)
                 this.data$.next(response.items);
                 this.total = response.count;
             });

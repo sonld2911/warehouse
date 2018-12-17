@@ -89,38 +89,19 @@ export const navigation: FuseNavigation[] = [
             },
         ],
     },
+
     {
-        'id': 'approver',
-        'title': 'Approver management',
-        'translate': 'NAV.APPROVER',
-        'type': 'group',
-        'children': [
-            {
-                id: 'approver-input',
-                title: 'Approver management',
-                translate: 'NAV.APPROVER_INPUT',
-                type: 'item',
-                icon: 'input',
-                url: '/admin/users',
-                badge    : {
-                    title    : '25',
-                    bg       : '#F44336',
-                    fg       : '#FFFFFF'
-                }
-            },
-            {
-                id: 'approver-output',
-                title: 'Approver management',
-                translate: 'NAV.APPROVER_OUTPUT',
-                type: 'item',
-                icon: 'assignment_return',
-                url: '/admin/warehouses',
-                badge    : {
-                    title    : '13',
-                    bg       : '#EC0C8E',
-                    fg       : '#FFFFFF'
-                }
-            },
-        ],
+        id: 'approver-input',
+        title: 'Approver management',
+        translate: 'NAV.APPROVER',
+        type: 'item',
+        icon: 'input',
+        url: '/admin/users',
+        // badge: {
+        //     title: '25',
+        //     bg: '#F44336',
+        //     fg: '#FFFFFF'
+        // },
+        
     },
 ];

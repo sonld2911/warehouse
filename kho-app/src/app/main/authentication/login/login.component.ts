@@ -95,8 +95,6 @@ export class LoginComponent implements OnInit {
                     this.loginForm.disable();
                     this.loginSuccess = true;
                     localStorage.setItem('key', user.username);
-                    const name = localStorage.getItem('name');
-                    console.log(name);
                     setTimeout(() => {
                         this.router.navigate(['/dashboard']);
                     }, 1000);
@@ -122,10 +120,10 @@ export class LoginComponent implements OnInit {
         pusher.subscribe(user)
                 .bind('post_updated', function (post): void {
                     console.log(post);
-                    const notification = new Notification('trung đang gửi notification',
+                    const notification = new Notification(post.title,
                     {
                         icon: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png',
-                        body: 'Hey there! You ve been notified!',
+                        body: post.body,
                     });
                     notification.onclick = function (event): void {
                         window.location.href = '/posts/' + post._id;
