@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { fuseAnimations } from '@fuse/animations';
-import { ActivatedRoute, ParamMap, UrlSegment } from '@angular/router';
+import { ActivatedRoute, ParamMap, UrlSegment, Router } from '@angular/router';
 import { concatMap, map, switchMap, takeUntil } from 'rxjs/operators';
 import { EMPTY, forkJoin, Observable, of, Subject } from 'rxjs';
 import { first, get } from 'lodash';
@@ -8,6 +8,7 @@ import { first, get } from 'lodash';
 import { PurchaseOrderService } from '@shared/services/purchase-order.service';
 import { PurchaseOrder, User } from '@shared/models';
 import { UserService } from '@shared/services/user.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
     selector: 'app-purchase-order-detail',
@@ -28,6 +29,8 @@ export class PurchaseOrderDetailComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private purchaseOrderService: PurchaseOrderService,
         private userService: UserService,
+        private notifier: NotifierService,
+        private router: Router
     ) {
         this.unsubscribe$ = new Subject<any>();
     }
@@ -42,6 +45,7 @@ export class PurchaseOrderDetailComponent implements OnInit, OnDestroy {
             )
             .subscribe((path: string) => {
                 this.viewPath = path;
+                console.log(this.viewPath);
             });
 
 
@@ -80,12 +84,27 @@ export class PurchaseOrderDetailComponent implements OnInit, OnDestroy {
                 takeUntil(this.unsubscribe$),
             );
     }
-    ssapprover(id , status): void {
+    ssapprover(id): void {
         console.log(id);
-        this.purchaseOrderService.invoiceApproval(id , status).subscribe(() => {
+        this.purchaseOrderService.invoiceApproval(id)
+            .pipe(
+                switchMap((response: any) => {
+                    if (!response) {
+                        return EMPTY;
+                    }
 
-console.log('ok');
+
+                }),
+            )
+            .subscribe(() => {
+                console.log('ok');
+
+            });
+        this.notifier.show({
+            type: 'success',
+            message: 'Duyệt đơn thành công',
         });
+        this.router.navigate(['/warehouse/approver']);
     }
 
     ngOnDestroy(): void {

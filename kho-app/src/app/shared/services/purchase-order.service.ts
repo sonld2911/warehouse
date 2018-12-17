@@ -135,10 +135,10 @@ export class PurchaseOrderService {
                 map((response: any) => new PurchaseOrder(response)),
             );
     }
-    invoiceApproval(id: string , status: string): Observable<any> {
-        const url = `${this.api.baseUrl}/purchase-orders/invoice-approval/${id}?status=${status}`;
+    invoiceApproval(data: any ): Observable<PurchaseOrder> {
+        const url = `${this.api.baseUrl}/purchase-orders/invoice-approval/${data}?status=true`;
 
-        return this.http.patch(url, {})
+        return this.http.patch(url, data)
             .pipe(
                 map((response: any) => new PurchaseOrder(response)),
             );

@@ -194,6 +194,7 @@ export const locale = {
                 'CREATED': 'Đã thêm đơn mới thành công.',
                 'EDITED': 'Đã sửa đơn thành công',
                 'DELETED': 'Đã xóa đơn thành công',
+                'CONFIRM_DELETE': 'Bạn có chắc xoá đơn hàng này không?'
             },
         },
 
