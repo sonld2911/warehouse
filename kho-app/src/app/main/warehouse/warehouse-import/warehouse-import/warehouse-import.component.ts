@@ -34,6 +34,8 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) private paginator: MatPaginator;
 
     public dataSource: WarehouseImportDataSource;
+    public dataSource2: WarehouseImportDataSource;
+
 
     public displayedColumns: string[] = [
         'id',
@@ -45,6 +47,14 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
         'inputDate',
         'outputDate',
         'actions',
+    ];
+    public displayedColumns2: string[] = [
+        'id',
+        'location',
+        'areas',
+        'managerDepartment',
+        'subtotal',
+        'status',
     ];
 
     public searchInput: FormControl;
@@ -91,7 +101,10 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
 
                 this._init();
             });
-
+            this.purchaseOrderService.find({status:'pending'}).subscribe((response: any)=>{
+                    this.dataSource2 = response.items;
+                    console.log(this.dataSource2);
+                });
 
         this.warehouseImportService
             .loading$
@@ -131,6 +144,7 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
             this.paginator,
             this.viewOrderType,
         );
+        
 
     }
 

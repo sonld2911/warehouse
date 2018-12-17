@@ -29,21 +29,21 @@
         </div>
 
         <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
-            
-            <button mat-button [matMenuTriggerFor]="notification" class="user-button">
+
+            <button mat-button [matMenuTriggerFor]="notification" class="user-button" (click)="notification()" >
                 <div fxLayout="row" fxLayoutAlign="center center">
-                    <mat-icon>notifications</mat-icon>                    
+                    <mat-icon>notifications</mat-icon>
                 </div>
             </button>
 
             <mat-menu #notification="matMenu" [overlapTrigger]="false">
-                    <button mat-menu-item *ngFor="let i of purchase">
+                <button mat-menu-item *ngFor="let i of purchase" >
                     Đơn <span>
                         {{i.orderType=="in" ? "nhập kho" : "xuất kho"}}
                     </span>
                     của đợn vị {{i.managerDepartment}}
-                        
-                    </button>
+
+                </button>
                 <!--<button mat-menu-item>
                     <mat-icon>account_circle</mat-icon>
                     <span>My Profile</span>

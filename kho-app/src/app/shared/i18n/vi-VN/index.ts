@@ -12,6 +12,7 @@ export const locale = {
             'WAREHOUSE_IMPORT': 'Quản Lý Nhập Kho',
             'WAREHOUSE_EXPORT': 'Quản Lý Xuất Kho',
             'PRODUCT_MANAGEMENT': 'Quản Lý Sản Phẩm',
+            'APPROVER_MANAGEMENT': 'Quản lý đơn',
             'APPROVER': 'Duyệt đơn',
             'APPROVER_INPUT': 'Duyệt đơn nhập kho',
             'APPROVER_OUTPUT': 'Duyệt đơn xuất kho',

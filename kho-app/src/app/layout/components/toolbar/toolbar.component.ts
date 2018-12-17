@@ -67,10 +67,18 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             .subscribe((user: User) => {
                 this.user = user;
             });
-            this.purchaseOrderService.find({status:"pending"}).subscribe((response: any)=>{
-                this.purchase =response.items
-                console.log(this.purchase)
-            });
+        // this.purchaseOrderService.find({status:"pending"}).subscribe((response: any)=>{
+        //     this.purchase = response.items;
+        //     console.log(this.purchase);
+        // });
+    }
+
+    notification(): void {
+        // this.purchaseOrderService.find({ status: 'pending' }).subscribe((response: any) => {
+        //     this.purchase = response.items;
+        //     console.log(this.purchase);
+        // });
+        console.log('a');
     }
 
     ngOnDestroy(): void {

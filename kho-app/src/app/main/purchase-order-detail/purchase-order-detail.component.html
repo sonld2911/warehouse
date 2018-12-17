@@ -24,9 +24,27 @@
                         {{ 'PURCHASE_ORDER.TITLES.ORDER_DETAIL' | translate }}
                     </div>
                 </div>
+                
             </div>
             <!-- / APP TITLE -->
-
+            <ng-container *ngIf="viewPath === 'approver'">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <div class="padding9">
+                            <ng-container *ngIf="(this.data$ | async) as data">
+                    <button mat-raised-button (click)="ssapprover(data.purchaseOrder?.id,'true')" class="add-product-button fuse-white mt-24 mt-md-0">
+                        <mat-icon>playlist_add</mat-icon>
+                        <span>Duyệt đơn</span>
+                    </button>
+                    </ng-container>
+                </div>
+                <div>
+                    <button mat-raised-button routerLink="/warehouse/import/new" class="add-product-button fuse-white mt-24 mt-md-0">
+                        <mat-icon>playlist_add</mat-icon>
+                        <span>Hủy đơn</span>
+                    </button>
+                </div>
+                </div>
+                </ng-container>
         </div>
         <!-- / HEADER -->
 
