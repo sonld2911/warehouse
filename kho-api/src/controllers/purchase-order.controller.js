@@ -64,6 +64,23 @@ async function sendNotification(data, to="notifications"){
 
     pusher.trigger(to, 'post_updated',data);
 }
+
+async function invoiceManagement(req, res, next){
+    const { PurchaseOrder, User } = req.app.get('models');
+    const user = req.user;
+    try {
+        const item = await PurchaseOrder.aggregate([
+            {$project:{status: 1, orderType: 1}},
+        ]);
+        if (!item) {
+            return next('error 404 product not found');
+        }
+        return res.json(item);
+    } catch (err) {
+        // TODO: handle error
+        return next(err);
+    }
+}
 async function findOne(req, res, next) {
     const { PurchaseOrder } = req.app.get('models');
     const { id } = req.params;
@@ -187,6 +204,7 @@ const PurchaseOrderController = {
     update,
     remove,
     invoiceApproval,
+    invoiceManagement
 };
 
 export {
