@@ -69,13 +69,29 @@ async function invoiceManagement(req, res, next){
     const { PurchaseOrder, User } = req.app.get('models');
     const user = req.user;
     try {
-        const item = await PurchaseOrder.aggregate([
-            {$project:{status: 1, orderType: 1}},
+        const items = await PurchaseOrder.aggregate([
+            { $match: {warehouseId: user.warehouseId} },
+            {$project:{status: 1, orderType: 1}}
         ]);
-        if (!item) {
+        let data = {
+            in: {
+                pending: 0,
+                accepted: 0,
+                rejected: 0,
+            },
+            out: {
+                pending: 0,
+                accepted: 0,
+                rejected: 0,
+            }
+        };
+        items.map(item => {
+            data[item.orderType][item.status]+=1;
+        });
+        if (!items) {
             return next('error 404 product not found');
         }
-        return res.json(item);
+        return res.json(data);
     } catch (err) {
         // TODO: handle error
         return next(err);
