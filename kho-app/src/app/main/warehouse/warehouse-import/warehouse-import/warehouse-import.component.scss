@@ -49,6 +49,9 @@
                         outline: none;
                     }
                 }
+                .mgl20{
+                    margin-left: 50px;
+                }
             }
 
             @include media-breakpoint('lt-md') {

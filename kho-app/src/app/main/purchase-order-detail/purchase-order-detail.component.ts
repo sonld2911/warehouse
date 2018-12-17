@@ -80,6 +80,13 @@ export class PurchaseOrderDetailComponent implements OnInit, OnDestroy {
                 takeUntil(this.unsubscribe$),
             );
     }
+    ssapprover(id , status): void {
+        console.log(id);
+        this.purchaseOrderService.invoiceApproval(id , status).subscribe(() => {
+
+console.log('ok');
+        });
+    }
 
     ngOnDestroy(): void {
         this.unsubscribe$.next();

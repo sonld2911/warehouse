@@ -10,6 +10,10 @@ const routes: Routes = [
         path: 'export',
         loadChildren: './warehouse-import/warehouse-import.module#WarehouseImportModule',
     },
+    {
+        path: 'approver',
+        loadChildren: './warehouse-import/warehouse-import.module#WarehouseImportModule',
+    },
 ];
 
 @NgModule({

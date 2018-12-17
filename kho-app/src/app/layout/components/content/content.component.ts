@@ -8,6 +8,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class ContentComponent
 {
+
     /**
      * Constructor
      */

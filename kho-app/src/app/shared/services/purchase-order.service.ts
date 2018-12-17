@@ -135,6 +135,14 @@ export class PurchaseOrderService {
                 map((response: any) => new PurchaseOrder(response)),
             );
     }
+    invoiceApproval(id: string , status: string): Observable<any> {
+        const url = `${this.api.baseUrl}/purchase-orders/invoice-approval/${id}?status=${status}`;
+
+        return this.http.patch(url, {})
+            .pipe(
+                map((response: any) => new PurchaseOrder(response)),
+            );
+    }
 
     // update(purchaseOrder: PurchaseOrder): Observable<PurchaseOrder> {
     //     if (!purchaseOrder.id) {

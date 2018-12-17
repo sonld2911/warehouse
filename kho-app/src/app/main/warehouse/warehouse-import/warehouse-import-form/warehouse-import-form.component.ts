@@ -25,6 +25,8 @@ import { first, get } from 'lodash';
 })
 export class WarehouseImportFormComponent implements OnInit, OnDestroy {
 
+    selected = 'mercedes';
+
     public form: FormGroup;
 
     // public products: Product[];
