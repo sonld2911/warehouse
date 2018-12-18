@@ -187,7 +187,6 @@ async function invoiceApproval(req, res, next) {
     const status = get(req.query, 'status', false);
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
-        console.log("trungtn");
         if (!item || item.status != "pending") return res.status(404).json({});
         if(status){
             item.products.map( async (product)=>{
@@ -195,8 +194,8 @@ async function invoiceApproval(req, res, next) {
                 if (item.orderType == "in")
                     statistical[product.productType]+=product.quantity;
                 else{
-                    let caculate = statistical[product.productType] - product.quantity;
-                    if(caculate<0) return res.status(400).json({});
+                    let calculator = statistical[product.productType] - product.quantity;
+                    if(calculator<0) return res.status(400).json({});
                     statistical[product.productType]-=product.quantity;
                 }
                 await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
@@ -204,8 +203,8 @@ async function invoiceApproval(req, res, next) {
         }
         await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
             {
-                status: status?"accepted":"rejected",
-                 updatedBy: user.id
+                status: (status === true)?"accepted":"rejected",
+                updatedBy: user.id
             });
         return res.status(204).json(item);
     } catch (err) {
