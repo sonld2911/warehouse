@@ -64,6 +64,39 @@ async function sendNotification(data, to="notifications"){
 
     pusher.trigger(to, 'post_updated',data);
 }
+
+async function invoiceManagement(req, res, next){
+    const { PurchaseOrder, User } = req.app.get('models');
+    const user = req.user;
+    try {
+        const items = await PurchaseOrder.aggregate([
+            { $match: {warehouseId: user.warehouseId} },
+            {$project:{status: 1, orderType: 1}}
+        ]);
+        let data = {
+            in: {
+                pending: 0,
+                accepted: 0,
+                rejected: 0,
+            },
+            out: {
+                pending: 0,
+                accepted: 0,
+                rejected: 0,
+            }
+        };
+        items.map(item => {
+            data[item.orderType][item.status]+=1;
+        });
+        if (!items) {
+            return next('error 404 product not found');
+        }
+        return res.json(data);
+    } catch (err) {
+        // TODO: handle error
+        return next(err);
+    }
+}
 async function findOne(req, res, next) {
     const { PurchaseOrder } = req.app.get('models');
     const { id } = req.params;
@@ -154,7 +187,6 @@ async function invoiceApproval(req, res, next) {
     const status = get(req.query, 'status', false);
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
-        console.log("trungtn");
         if (!item || item.status != "pending") return res.status(404).json({});
         if(status){
             item.products.map( async (product)=>{
@@ -162,8 +194,8 @@ async function invoiceApproval(req, res, next) {
                 if (item.orderType == "in")
                     statistical[product.productType]+=product.quantity;
                 else{
-                    let caculate = statistical[product.productType] - product.quantity;
-                    if(caculate<0) return res.status(400).json({});
+                    let calculator = statistical[product.productType] - product.quantity;
+                    if(calculator<0) return res.status(400).json({});
                     statistical[product.productType]-=product.quantity;
                 }
                 await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
@@ -171,8 +203,8 @@ async function invoiceApproval(req, res, next) {
         }
         await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
             {
-                status: status?"accepted":"rejected",
-                 updatedBy: user.id
+                status: (status === true)?"accepted":"rejected",
+                updatedBy: user.id
             });
         return res.status(204).json(item);
     } catch (err) {
@@ -187,6 +219,7 @@ const PurchaseOrderController = {
     update,
     remove,
     invoiceApproval,
+    invoiceManagement
 };
 
 export {
