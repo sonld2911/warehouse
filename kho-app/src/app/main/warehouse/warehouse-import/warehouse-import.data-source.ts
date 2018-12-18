@@ -19,7 +19,7 @@ export class WarehouseImportDataSource extends DataSource<any> {
     constructor(
         private purchaseOrderService: PurchaseOrderService,
         private warehouseImportService: WarehouseImportService,
-        private paginator: MatPaginator,
+        // private paginator: MatPaginator,
         private orderType: PURCHASE_ORDER_TYPE,
     ) {
         super();
@@ -33,7 +33,7 @@ export class WarehouseImportDataSource extends DataSource<any> {
 
     connect(): Observable<any> {
         merge(
-            this.paginator.page,
+            // this.paginator.page,
             this.warehouseImportService.term$,
             this.warehouseImportService.refresh$,
         ).pipe(
@@ -55,8 +55,8 @@ export class WarehouseImportDataSource extends DataSource<any> {
     search(): void {
         const term: any = {
             ...omitBy(this.warehouseImportService.term, isEmpty),
-            pageIndex: this.paginator.pageIndex,
-            pageSize: this.paginator.pageSize,
+            // pageIndex: this.paginator.pageIndex,
+            // pageSize: this.paginator.pageSize,
             orderType: this.orderType,
         };
 

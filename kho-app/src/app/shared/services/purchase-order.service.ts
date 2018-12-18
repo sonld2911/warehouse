@@ -144,6 +144,15 @@ export class PurchaseOrderService {
             );
     }
 
+    RejectinvoiceApproval(data: any ): Observable<PurchaseOrder> {
+        const url = `${this.api.baseUrl}/purchase-orders/invoice-approval/${data}?status=false`;
+
+        return this.http.patch(url, data)
+            .pipe(
+                map((response: any) => new PurchaseOrder(response)),
+            );
+    }
+
     // update(purchaseOrder: PurchaseOrder): Observable<PurchaseOrder> {
     //     if (!purchaseOrder.id) {
     //         // TODO: handle error

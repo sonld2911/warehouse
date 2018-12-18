@@ -92,7 +92,7 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
                 if (path === 'import') {
                     this.displayedColumns = this.displayedColumns.filter(c => c !== 'outputDate');
                     this.viewOrderType = PURCHASE_ORDER_TYPE.IN;
-                } else {
+                } if (path === 'export') {
                     this.displayedColumns = this.displayedColumns.filter(c => c !== 'inputDate');
                     this.viewOrderType = PURCHASE_ORDER_TYPE.OUT;
                 }
@@ -126,7 +126,7 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
                 distinctUntilChanged(),
             )
             .subscribe((keyword: string) => {
-                this.paginator.pageIndex = 0;
+                // this.paginator.pageIndex = 0;
                 this.warehouseImportService.term = {keyword};
             });
     }
@@ -141,7 +141,7 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
         this.dataSource = new WarehouseImportDataSource(
             this.purchaseOrderService,
             this.warehouseImportService,
-            this.paginator,
+            // this.paginator,
             this.viewOrderType,
         );
         
@@ -257,7 +257,7 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
             }
 
             if (Array.isArray(term) && term[0] === 'save') {
-                this.paginator.pageIndex = 0;
+                // this.paginator.pageIndex = 0;
                 this.warehouseImportService.term = term[1];
             }
         });

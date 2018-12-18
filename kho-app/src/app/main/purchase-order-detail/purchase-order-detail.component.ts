@@ -106,6 +106,28 @@ export class PurchaseOrderDetailComponent implements OnInit, OnDestroy {
         });
         this.router.navigate(['/warehouse/approver']);
     }
+    rejectApprover(id): void {
+        console.log(id);
+        this.purchaseOrderService.RejectinvoiceApproval(id)
+            .pipe(
+                switchMap((response: any) => {
+                    if (!response) {
+                        return EMPTY;
+                    }
+
+
+                }),
+            )
+            .subscribe(() => {
+                console.log('ok');
+
+            });
+        this.notifier.show({
+            type: 'error',
+            message: 'Huỷ đơn thành công',
+        });
+        this.router.navigate(['/warehouse/approver']);
+    }
 
     ngOnDestroy(): void {
         this.unsubscribe$.next();

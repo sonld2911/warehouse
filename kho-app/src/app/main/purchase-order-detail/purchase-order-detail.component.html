@@ -38,7 +38,7 @@
                     <div>
                             <ng-container *ngIf="(this.data$ | async) as data">
 
-                        <button mat-raised-button routerLink="/warehouse/import/new" class="add-product-button fuse-white mt-24 mt-md-0">
+                        <button mat-raised-button (click)="rejectApprover(data.purchaseOrder?.id)" class="add-product-button fuse-white mt-24 mt-md-0">
                             <mat-icon>playlist_add</mat-icon>
                             <span>Hủy đơn</span>
                         </button>

@@ -67,7 +67,87 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card">
-            <ng-container >
+            <ng-container *ngIf=" viewPath === 'approver'">
+                <mat-table class="purchase-orders-table" [dataSource]="dataSource2" [@animateStagger]="{value:'50'}">
+
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.ID' |
+                            translate
+                            }}</mat-header-cell>
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            <span class="text-truncate">{{item.id}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="location">
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.LOCATION' |
+                            translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            {{item.location}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="areas">
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.AREAS' |
+                            translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            {{item.areas}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="managerDepartment">
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{
+                            'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            {{item.managerDepartment}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="subtotal">
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.SUBTOTAL' |
+                            translate }}</mat-header-cell>
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            {{item.subtotal | currency:'VND'}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">
+                            {{ 'PURCHASE_ORDER.STATUS' | translate }}
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            <ng-container *ngIf="item.isStatusPending">
+                                <mat-icon matTooltip="{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate }}" class="orange-500-fg">
+                                    access_time
+                                </mat-icon>
+                            </ng-container>
+                            <ng-container *ngIf="item.isStatusAccepted">
+                                <mat-icon matTooltip="{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate }}" class="green-500-fg">
+                                    check_circle
+                                </mat-icon>
+                            </ng-container>
+                            <ng-container *ngIf="item.isStatusRejected">
+                                <mat-icon matTooltip="{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate }}" class="red-500-fg">
+                                    block
+                                </mat-icon>
+                            </ng-container>
+                        </mat-cell>
+                    </ng-container>
+
+
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns2; sticky:true"></mat-header-row>
+
+                    <mat-row *matRowDef="let item; columns: displayedColumns2;" class="product" [routerLink]="'/warehouse/' + viewPath + '/detail/' + item.id"
+                        matRipple>
+                    </mat-row>
+
+                </mat-table>
+
+
+            </ng-container>
+
+            <ng-container *ngIf=" viewPath !== 'approver'" >
                 <mat-table class="purchase-orders-table" #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}"
                     fusePerfectScrollbar>
 
@@ -153,20 +233,20 @@
                         </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="actions"  >
+                    <ng-container matColumnDef="actions">
                         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center"  >
-                        <ng-container *ngIf="item.isStatusPending">
+                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
+                            <ng-container *ngIf="item.isStatusPending">
 
-                            <button mat-icon-button color="accent" matTooltip="{{ 'COMMON.BUTTONS.EDIT' | translate }}"
-                                (click)="$event.stopPropagation()" [routerLink]="'/warehouse/' + viewPath + '/edit/' + item.id">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" matTooltip="{{ 'COMMON.BUTTONS.DELETE' | translate }}"
-                                (click)="$event.stopPropagation(); remove(item)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                    </ng-container>
+                                <button mat-icon-button color="accent" matTooltip="{{ 'COMMON.BUTTONS.EDIT' | translate }}"
+                                    (click)="$event.stopPropagation()" [routerLink]="'/warehouse/' + viewPath + '/edit/' + item.id">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" matTooltip="{{ 'COMMON.BUTTONS.DELETE' | translate }}"
+                                    (click)="$event.stopPropagation(); remove(item)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </ng-container>
 
                         </mat-cell>
                     </ng-container>
@@ -178,90 +258,12 @@
                     </mat-row>
 
                 </mat-table>
-
+<!-- 
                 <mat-paginator #paginator [length]="dataSource.count" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
-                </mat-paginator>
+                </mat-paginator> -->
             </ng-container>
 
-            <ng-container *ngIf=" viewPath === 'approver'">
-                <mat-table class="purchase-orders-table" [dataSource]="dataSource2" [@animateStagger]="{value:'50'}">
 
-                    <ng-container matColumnDef="id">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.ID' |
-                            translate
-                            }}</mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
-                            <span class="text-truncate">{{item.id}}</span>
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="location">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.LOCATION' |
-                            translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
-                            {{item.location}}
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="areas">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.AREAS' |
-                            translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
-                            {{item.areas}}
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="managerDepartment">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{
-                            'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
-                            {{item.managerDepartment}}
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="subtotal">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.SUBTOTAL' |
-                            translate }}</mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
-                            {{item.subtotal | currency:'VND'}}
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="status">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">
-                            {{ 'PURCHASE_ORDER.STATUS' | translate }}
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
-                            <ng-container *ngIf="item.isStatusPending">
-                                <mat-icon matTooltip="{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate }}" class="orange-500-fg">
-                                    access_time
-                                </mat-icon>
-                            </ng-container>
-                            <ng-container *ngIf="item.isStatusAccepted">
-                                <mat-icon matTooltip="{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate }}" class="green-500-fg">
-                                    check_circle
-                                </mat-icon>
-                            </ng-container>
-                            <ng-container *ngIf="item.isStatusRejected">
-                                <mat-icon matTooltip="{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate }}" class="red-500-fg">
-                                    block
-                                </mat-icon>
-                            </ng-container>
-                        </mat-cell>
-                    </ng-container>
-
-
-
-                    <mat-header-row *matHeaderRowDef="displayedColumns2; sticky:true"></mat-header-row>
-
-                    <mat-row *matRowDef="let item; columns: displayedColumns2;" class="product" [routerLink]="'/warehouse/' + viewPath + '/detail/' + item.id"
-                        matRipple>
-                    </mat-row>
-
-                </mat-table>
-
-
-            </ng-container>
         </div>
         <!-- / CONTENT CARD -->
     </div>

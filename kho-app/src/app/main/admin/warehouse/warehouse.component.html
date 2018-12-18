@@ -28,11 +28,11 @@
             </div>-->
 
         </div>
-
+        <ng-container *ngIf="loggedInUser?.isAdminRole">
         <button mat-flat-button color="primary" (click)="new()">
             {{ 'WAREHOUSE.BUTTONS.NEW' | translate }}
         </button>
-
+        </ng-container>
     </div>
 
     <div class="content">
