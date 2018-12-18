@@ -56,10 +56,11 @@ async function find(req, res, next) {
 async function sendNotification(data, to="notifications"){
     let Pusher = require('pusher');
     let pusher = new Pusher({
-        appId: "665345",
-        key: "32f3c61f78d9f66b2d26",
-        secret: "77a38bfba30ee9b1ff85",
-        cluster: "ap1"
+        appId: '665346',
+        key: 'bbe0eadeb38f6154df71',
+        secret: 'b04faba27d6ad9ad5bb0',
+        cluster: 'ap1',
+        encrypted: true
     });
 
     pusher.trigger(to, 'post_updated',data);

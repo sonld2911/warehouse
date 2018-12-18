@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
     }
     notification (user): void {
         console.log(user);
-        const pusher = new this.Pusher('32f3c61f78d9f66b2d26', { cluster: 'ap1', forceTLS: true});
+        const pusher = new this.Pusher('bbe0eadeb38f6154df71', { cluster: 'ap1', forceTLS: true});
         const axios = require('axios');
 
         // retrieve the socket ID once we're connected
@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit {
                         body: post.body,
                     });
                     notification.onclick = function (event): void {
-                        window.location.href = '/posts/' + post._id;
+                        window.location.href = '/warehouse/approver/detail/' + post.purchaseOrderId;
                         event.preventDefault();
                         notification.close();
                     };
