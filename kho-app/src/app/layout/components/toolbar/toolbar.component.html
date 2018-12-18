@@ -30,14 +30,14 @@
 
         <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
 
-            <button mat-button [matMenuTriggerFor]="notification" class="user-button" (click)="notification()" >
+            <button mat-button [matMenuTriggerFor]="notification" class="user-button" >
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon>notifications</mat-icon>
                 </div>
             </button>
 
             <mat-menu #notification="matMenu" [overlapTrigger]="false">
-                <button mat-menu-item *ngFor="let i of purchase" >
+                <button mat-menu-item *ngFor="let i of purchase" routerLink="/warehouse/approver">
                     Đơn <span>
                         {{i.orderType=="in" ? "nhập kho" : "xuất kho"}}
                     </span>

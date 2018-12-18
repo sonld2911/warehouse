@@ -78,6 +78,17 @@ export class ProductService {
             );
     }
 
+    count(): Observable<any> {
+        return this.http.get(`${this.api.baseUrl}/purchase-orders/invoice_management`)
+            .pipe(
+                map((response: any) => {
+                    return response;
+                }
+
+                ),
+            );
+    }
+
     create(product: Product): Observable<Product> {
         return this.http.post(this.BASE_URL, product)
             .pipe(

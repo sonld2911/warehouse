@@ -25,7 +25,8 @@
                 <div class="widget-group p-12 height" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom [@animateStagger]="{value:'50'}">
 
                     <!-- WIDGET 1 -->
-                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                        fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
                         <!-- Front -->
                         <div class="fuse-widget-front">
@@ -38,7 +39,7 @@
 
                             <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                                 <div class="green-fg font-size-72 line-height-72">
-                                    2
+                                    {{count.in.accepted}}
                                 </div>
                                 <div class="h3 secondary-text font-weight-500">
                                     Đơn hàng
@@ -50,7 +51,7 @@
                                     Tổng số đơn nhập kho:
                                 </span>
                                 <span class="h4 ml-8">
-                                    5
+                                    {{sumIn}}
                                 </span>
                             </div>
                         </div>
@@ -59,7 +60,8 @@
 
                     </fuse-widget>
 
-                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                        fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
                         <!-- Front -->
                         <div class="fuse-widget-front">
@@ -72,7 +74,7 @@
 
                             <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                                 <div class="orange-fg font-size-72 line-height-72">
-                                    3
+                                    {{count.in.pending}}
                                 </div>
                                 <div class="h3 secondary-text font-weight-500">
                                     Đơn hàng
@@ -84,14 +86,15 @@
                                     Tổng số đơn nhập kho:
                                 </span>
                                 <span class="h4 ml-8">
-                                    5
+                                    {{sumIn}}
                                 </span>
                             </div>
                         </div>
                         <!-- / Front -->
                     </fuse-widget>
 
-                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                        fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
                         <!-- Front -->
                         <div class="fuse-widget-front">
@@ -104,7 +107,7 @@
 
                             <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                                 <div class="red-fg font-size-72 line-height-72">
-                                    0
+                                    {{count.in.rejected}}
                                 </div>
                                 <div class="h3 secondary-text font-weight-500">
                                     Đơn hàng
@@ -116,7 +119,7 @@
                                     Tổng số đơn nhập kho:
                                 </span>
                                 <span class="h4 ml-8">
-                                    5
+                                    {{sumIn}}
                                 </span>
                             </div>
                         </div>
@@ -132,7 +135,8 @@
                 <div class="widget-group p-12 height" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom [@animateStagger]="{value:'50'}">
 
                     <!-- WIDGET 1 -->
-                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                        fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
                         <!-- Front -->
                         <div class="fuse-widget-front">
@@ -145,7 +149,7 @@
 
                             <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                                 <div class="green-fg font-size-72 line-height-72">
-                                    2
+                                    {{count.out.accepted}}
                                 </div>
                                 <div class="h3 secondary-text font-weight-500">
                                     Đơn hàng
@@ -157,7 +161,7 @@
                                     Tổng số đơn nhập kho:
                                 </span>
                                 <span class="h4 ml-8">
-                                    5
+                                    {{sumOut}}
                                 </span>
                             </div>
                         </div>
@@ -166,7 +170,8 @@
 
                     </fuse-widget>
 
-                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                        fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
                         <!-- Front -->
                         <div class="fuse-widget-front">
@@ -179,7 +184,7 @@
 
                             <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                                 <div class="orange-fg font-size-72 line-height-72">
-                                    3
+                                    {{count.out.pending}}
                                 </div>
                                 <div class="h3 secondary-text font-weight-500">
                                     Đơn hàng
@@ -191,14 +196,15 @@
                                     Tổng số đơn nhập kho:
                                 </span>
                                 <span class="h4 ml-8">
-                                    5
+                                    {{sumOut}}
                                 </span>
                             </div>
                         </div>
                         <!-- / Front -->
                     </fuse-widget>
 
-                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="33" fxFlex.gt-md="33">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+                        fxFlex.gt-xs="33" fxFlex.gt-md="33">
 
                         <!-- Front -->
                         <div class="fuse-widget-front">
@@ -211,7 +217,7 @@
 
                             <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                                 <div class="red-fg font-size-72 line-height-72">
-                                    0
+                                    {{count.out.rejected}}
                                 </div>
                                 <div class="h3 secondary-text font-weight-500">
                                     Đơn hàng
@@ -223,7 +229,7 @@
                                     Tổng số đơn nhập kho:
                                 </span>
                                 <span class="h4 ml-8">
-                                    5
+                                    {{sumOut}}
                                 </span>
                             </div>
                         </div>
@@ -233,10 +239,8 @@
             </div>
         </mat-tab>
         <mat-tab label="Thống kê vật liệu">
-            <mat-table class="products-table"
-                       #table [dataSource]="product"
-                       [@animateStagger]="{value:'50'}"
-                       fusePerfectScrollbar>
+            <mat-table class="products-table" #table [dataSource]="product" [@animateStagger]="{value:'50'}"
+                fusePerfectScrollbar>
 
                 <ng-container matColumnDef="id">
                     <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">ID</mat-header-cell>
@@ -298,12 +302,10 @@
                     </mat-cell>
                 </ng-container>
 
-                
+
                 <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
 
-                <mat-row *matRowDef="let item; columns: displayedColumns;"
-                         class="product"
-                         matRipple>
+                <mat-row *matRowDef="let item; columns: displayedColumns;" class="product" matRipple>
                 </mat-row>
 
             </mat-table>
