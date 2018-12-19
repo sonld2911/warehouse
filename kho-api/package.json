@@ -7,6 +7,7 @@
     "scripts": {
         "clean:dist": "rimraf dist",
         "start": "nodemon --exec babel-node src/index.js",
+        "start-demo": "nodemon --exec babel-node src/index.js --host 0.0.0.0 ",
         "build": "npm run clean:dist && babel src --out-dir dist",
         "serve": "node dist/index.js",
         "lint": "eslint src/*"
