@@ -204,7 +204,7 @@ async function invoiceApproval(req, res, next) {
         }
         await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
             {
-                status: (status === true)?"accepted":"rejected",
+                status: (status == 'true')?"accepted":"rejected",
                 updatedBy: user.id
             });
         return res.status(204).json(item);
