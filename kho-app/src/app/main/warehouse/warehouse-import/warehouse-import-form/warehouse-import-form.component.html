@@ -123,7 +123,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="product-row" *ngFor="let product of form.get('products').controls; let i = index" [formGroup]="product">
+
+                                        <tr class="product-row" *ngFor="let product of form.get('products')['controls']; let i = index"
+                                            [formGroup]="product">
                                             <td class="text-center">
                                                 {{purchaseOrder.products[i]?.product?.code}}
                                             </td>
