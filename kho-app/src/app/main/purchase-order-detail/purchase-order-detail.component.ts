@@ -83,6 +83,7 @@ export class PurchaseOrderDetailComponent implements OnInit, OnDestroy {
                 })),
                 takeUntil(this.unsubscribe$),
             );
+            console.log(this.data$)
     }
     ssapprover(id): void {
         console.log(id);

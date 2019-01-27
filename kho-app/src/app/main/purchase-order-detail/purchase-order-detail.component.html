@@ -36,12 +36,12 @@
                         </ng-container>
                     </div>
                     <div>
-                            <ng-container *ngIf="(this.data$ | async) as data">
+                        <ng-container *ngIf="(this.data$ | async) as data">
 
-                        <button mat-raised-button (click)="rejectApprover(data.purchaseOrder?.id)" class="add-product-button fuse-white mt-24 mt-md-0">
-                            <mat-icon>playlist_add</mat-icon>
-                            <span>Hủy đơn</span>
-                        </button>
+                            <button mat-raised-button (click)="rejectApprover(data.purchaseOrder?.id)" class="add-product-button fuse-white mt-24 mt-md-0">
+                                <mat-icon>playlist_add</mat-icon>
+                                <span>Hủy đơn</span>
+                            </button>
                         </ng-container>
                     </div>
                 </div>
@@ -72,22 +72,107 @@
                                             <td>{{ data.purchaseOrder?.subtotal | currency:'VND' }}</td>
                                         </tr>
                                         <tr>
-                                            <td>{{ 'PURCHASE_ORDER.STATUS' | translate }}</td>
+                                            <td>Chữ Ký Đội Trưởng</td>
                                             <td fxLayoutAlign="start center">
-                                                <ng-container *ngIf="data.purchaseOrder.isStatusPending">
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.user.status==='pending'">
                                                     <mat-icon class="orange-500-fg mr-4">access_time</mat-icon>
-                                                    <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' |
-                                                        translate }}</span>
+                                                    <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate
+                                                        }}
+                                                    </span> &nbsp;-&nbsp;<span>{{data.purchaseOrder?.assignees.user.name}}
+                                                    </span>
                                                 </ng-container>
-                                                <ng-container *ngIf="data.purchaseOrder.isStatusAccepted">
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.user.status==='accepted'">
                                                     <mat-icon class="green-500-fg mr-4">check_circle</mat-icon>
-                                                    <span class="green-500-fg">{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' |
-                                                        translate }}</span>
+                                                    <span class="green-500-fg">{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span> {{data.purchaseOrder?.assignees.user.name}}
+                                                    </span>
                                                 </ng-container>
-                                                <ng-container *ngIf="data.purchaseOrder.isStatusRejected">
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.user.status==='rejected'">
                                                     <mat-icon class="red-500-fg mr-4">block</mat-icon>
-                                                    <span class="red-500-fg">{{ 'PURCHASE_ORDER.STATUSES.REJECTED' |
-                                                        translate }}</span>
+                                                    <span class="red-500-fg">{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span>{{data.purchaseOrder?.assignees.user.name}}
+                                                    </span>
+                                                </ng-container>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chữ Ký Quảng Lý Sửa Chữa</td>
+                                            <td fxLayoutAlign="start center">
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.repair.status==='pending'">
+                                                    <mat-icon class="orange-500-fg mr-4">access_time</mat-icon>
+                                                    <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate
+                                                        }}
+                                                    </span> <span *ngIf="data.purchaseOrder?.assignees.repair.name===nulll"></span><span
+                                                        *ngIf="data.purchaseOrder?.assignees.repair.name!==nulll">&nbsp;-&nbsp;{{data.purchaseOrder?.repair.name}}</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.repair.status==='accepted'">
+                                                    <mat-icon class="green-500-fg mr-4">check_circle</mat-icon>
+                                                    <span class="green-500-fg">{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span> {{data.purchaseOrder?.assignees.repair.name}}
+                                                    </span>
+                                                </ng-container>
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.repair.status==='rejected'">
+                                                    <mat-icon class="red-500-fg mr-4">block</mat-icon>
+                                                    <span class="red-500-fg">{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span>{{data.purchaseOrder?.assignees.repair.name}}
+                                                    </span>
+                                                </ng-container>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chữ Ký Quản Lý Kỹ Thuật</td>
+                                            <td fxLayoutAlign="start center">
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.technical.status==='pending'">
+                                                    <mat-icon class="orange-500-fg mr-4">access_time</mat-icon>
+                                                    <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate
+                                                        }}
+                                                    </span><span>{{data.purchaseOrder?.assignees.technical.name}}
+                                                    </span><span *ngIf="data.purchaseOrder?.assignees.technical.name===nulll"></span><span
+                                                        *ngIf="data.purchaseOrder?.assignees.technical.name!==nulll">&nbsp;-&nbsp;{{data.purchaseOrder?.technical.name}}</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.technical.status==='accepted'">
+                                                    <mat-icon class="green-500-fg mr-4">check_circle</mat-icon>
+                                                    <span class="green-500-fg">{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span> {{data.purchaseOrder?.assignees.technical.name}}
+                                                    </span>
+                                                </ng-container>
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.technical.status==='rejected'">
+                                                    <mat-icon class="red-500-fg mr-4">block</mat-icon>
+                                                    <span class="red-500-fg">{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span>{{data.purchaseOrder?.assignees.technical.name}}
+                                                    </span>
+                                                </ng-container>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chữ Ký Quản Kho</td>
+                                            <td fxLayoutAlign="start center">
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.stocker.status==='pending'">
+                                                    <mat-icon class="orange-500-fg mr-4">access_time</mat-icon>
+                                                    <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate
+                                                        }}
+                                                    </span> <span *ngIf="data.purchaseOrder?.assignees.stocker.name===nulll"></span><span
+                                                    *ngIf="data.purchaseOrder?.assignees.stocker.name!==nulll">&nbsp;-&nbsp;{{data.purchaseOrder?.stocker.name}}</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.stocker.status==='accepted'">
+                                                    <mat-icon class="green-500-fg mr-4">check_circle</mat-icon>
+                                                    <span class="green-500-fg">{{ 'PURCHASE_ORDER.STATUSES.ACCEPTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span> {{data.purchaseOrder?.assignees.stocker.name}}
+                                                    </span>
+                                                </ng-container>
+                                                <ng-container *ngIf="data.purchaseOrder?.assignees.stocker.status==='rejected'">
+                                                    <mat-icon class="red-500-fg mr-4">block</mat-icon>
+                                                    <span class="red-500-fg">{{ 'PURCHASE_ORDER.STATUSES.REJECTED' | translate
+                                                        }}
+                                                    </span>&nbsp;-&nbsp;<span>{{data.purchaseOrder?.assignees.stocker.name}}
+                                                    </span>
                                                 </ng-container>
                                             </td>
                                         </tr>
@@ -180,8 +265,9 @@
                                         <ng-template #noProduct>
                                             <tr>
                                                 <td colspan="10" class="text-center">
-                                                    <p class="h2">{{ 'PURCHASE_ORDER.MESSAGES.EMPTY_PRODUCT' |
-                                                        translate }}</p>
+                                                    <p class="h2">{{ 'PURCHASE_ORDER.MESSAGES.EMPTY_PRODUCT' | translate
+                                                        }}
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </ng-template>
