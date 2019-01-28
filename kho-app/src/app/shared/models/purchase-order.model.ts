@@ -17,6 +17,7 @@ export class PurchaseOrder {
     orderType: string;
     status: string;
     warehouseId: string;
+    assignees: string| null;
 
     createdBy: string | null;
     updatedBy: string | null;

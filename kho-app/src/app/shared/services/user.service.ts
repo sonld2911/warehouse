@@ -62,6 +62,33 @@ export class UserService {
             );
     }
 
+    findAssignPersion(term: any = {}): Observable<any> {
+        const url = `${this.api.baseUrl}/purchase-orders/assignees/`;
+
+        const pageSize = get(term, 'pageSize', '10');
+
+        const pageIndex = get(term, 'pageIndex', '0');
+
+        const filter = {'populate': 'warehouseId'};
+
+        const options = {
+            params: new HttpParams()
+                .set('limit', pageSize)
+                .set('page', `${+pageIndex + 1}`)
+                .set('filter', JSON.stringify(filter)),
+        };
+
+        return this.http.get(url)
+            .pipe(
+                map((response: any) => {
+                    return {
+                        items: response,
+                    };
+                }),
+            );
+    }
+
+
     count(term: any = {}): Observable<number> {
         const url = `${this.api.baseUrl}/users/count`;
 

@@ -35,7 +35,8 @@ export const locale = {
             'WAREHOUSE': 'Kho Hàng',
             'ROLES': {
                 'ADMIN': 'Quản Trị Viên',
-                'MANAGER': 'Quản Lý',
+                'REPAIR': 'Quản Lý Sửa Chữa',
+                'TECHNICAL': 'Quản Lý Kỹ Thuật',
                 'STOCKER': 'Quản Kho',
                 'USER': 'Người Dùng Thường',
             },

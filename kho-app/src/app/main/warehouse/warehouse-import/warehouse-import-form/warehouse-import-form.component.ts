@@ -10,6 +10,7 @@ import { EMPTY, Observable, Subject } from 'rxjs';
 import { concatMap, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { PRODUCT_TYPE, PURCHASE_ORDER_TYPE } from '@shared/enums';
 import { PurchaseOrderService } from '@shared/services/purchase-order.service';
+import { UserService } from '@shared/services/user.service';
 import { ActivatedRoute, ParamMap, Router, UrlSegment } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
@@ -41,12 +42,16 @@ export class WarehouseImportFormComponent implements OnInit, OnDestroy {
 
     private unsubscribe$: Subject<any>;
 
+    public assignPersion: any[];
+
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private formBuilder: FormBuilder,
         private matDialog: MatDialog,
         private purchaseOrderService: PurchaseOrderService,
+        private UserService: UserService,
         private productStore$: ProductStoreService,
         private notifier: NotifierService,
         private translate: TranslateService,
@@ -69,6 +74,8 @@ export class WarehouseImportFormComponent implements OnInit, OnDestroy {
             managerDepartment: [''],
             inputDate: [''],
             outputDate: [''],
+            assignees: [''],
+
             // orderType: [PURCHASE_ORDER_TYPE.IN],
             products: this.formBuilder.array([]),
         });
@@ -114,6 +121,8 @@ export class WarehouseImportFormComponent implements OnInit, OnDestroy {
                 managerDepartment: purchaseOrder.managerDepartment,
                 inputDate: purchaseOrder.inputDate,
                 outputDate: purchaseOrder.outputDate,
+                assignees: purchaseOrder.assignees,
+
             });
 
             purchaseOrder.products.forEach((product: PurchaseOrderProduct) => {
@@ -143,6 +152,11 @@ export class WarehouseImportFormComponent implements OnInit, OnDestroy {
                     }),
                 );
             });
+            this.UserService
+            .findAssignPersion()
+            .subscribe((response: any) => {
+                this.assignPersion=response.items;
+            })
     }
 
     ngOnDestroy(): void {

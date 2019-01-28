@@ -38,8 +38,11 @@ export class User {
         return this.role === ROLE.ADMIN;
     }
 
-    get isManagerRole(): boolean {
-        return this.role === ROLE.MANAGER;
+    get isRepairRole(): boolean {
+        return this.role === ROLE.REPAIR;
+    }
+    get isTechnicalRole(): boolean {
+        return this.role === ROLE.TECHNICAL;
     }
 
     get isStockerRole(): boolean {

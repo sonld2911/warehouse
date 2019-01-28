@@ -56,28 +56,25 @@
 
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>{{ 'PURCHASE_ORDER.AREAS' | translate }}</mat-label>
-                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.AREAS' | translate }}" name="areas"
-                                        formControlName="areas" required>
+                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.AREAS' | translate }}" name="areas" formControlName="areas" required>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>{{ 'PURCHASE_ORDER.LOCATION' | translate }}</mat-label>
-                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.LOCATION' | translate }}" name="location"
-                                        formControlName="location" required>
+                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.LOCATION' | translate }}" name="location" formControlName="location" required>
                                 </mat-form-field>
 
                                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                     <mat-label>{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</mat-label>
-                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}"
-                                        name="managerDepartment" formControlName="managerDepartment" required>
+                                    <input matInput placeholder="{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}" name="managerDepartment" formControlName="managerDepartment"
+                                        required>
                                 </mat-form-field>
 
                                 <ng-container *ngIf="viewPath === 'import'">
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                         <mat-label>{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}</mat-label>
-                                        <input matInput placeholder="{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}"
-                                            name="inputDate" formControlName="inputDate" [matDatepicker]="picker"
-                                            required>
+                                        <input matInput placeholder="{{ 'PURCHASE_ORDER.INPUT_DATE' | translate }}" name="inputDate" formControlName="inputDate"
+                                            [matDatepicker]="picker" required>
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
@@ -86,11 +83,19 @@
                                 <ng-container *ngIf="viewPath === 'export'">
                                     <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
                                         <mat-label>{{ 'PURCHASE_ORDER.OUTPUT_DATE' | translate }}</mat-label>
-                                        <input matInput placeholder="{{ 'PURCHASE_ORDER.OUTPUT_DATE' | translate }}"
-                                            name="outputDate" formControlName="outputDate" [matDatepicker]="pickerOutputDate"
-                                            required>
+                                        <input matInput placeholder="{{ 'PURCHASE_ORDER.OUTPUT_DATE' | translate }}" name="outputDate" formControlName="outputDate"
+                                            [matDatepicker]="pickerOutputDate" required>
                                         <mat-datepicker-toggle matSuffix [for]="pickerOutputDate"></mat-datepicker-toggle>
                                         <mat-datepicker #pickerOutputDate></mat-datepicker>
+                                    </mat-form-field>
+                                </ng-container>
+
+                                <ng-container *ngIf="viewPath === 'export'">
+                                    <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+                                        <mat-label>Người Duyệt Đơn</mat-label>
+                                        <mat-select placeholder="Người Duyệt Đơn" name="assignees" formControlName="assignees" required>
+                                            <mat-option *ngFor="let assign of assignPersion" [value]="assign.id" >{{assign.username}}</mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </ng-container>
 
@@ -118,6 +123,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         <tr class="product-row" *ngFor="let product of form.get('products')['controls']; let i = index"
                                             [formGroup]="product">
                                             <td class="text-center">
@@ -129,8 +135,7 @@
                                             <td>
                                                 <mat-form-field floatLabel="never" class="w-100-p">
                                                     <mat-label>{{ 'PRODUCT.PRODUCT_TYPE' | translate }}</mat-label>
-                                                    <mat-select placeholder="{{ 'PRODUCT.PRODUCT_TYPE' | translate }}"
-                                                        name="productType" formControlName="productType" required>
+                                                    <mat-select placeholder="{{ 'PRODUCT.PRODUCT_TYPE' | translate }}" name="productType" formControlName="productType" required>
                                                         <mat-option *ngFor="let item of PRODUCT_TYPES" [value]="item.id">
                                                             {{ 'PRODUCT.TYPES.' + item.translateKey | translate }}
                                                         </mat-option>
@@ -141,15 +146,13 @@
                                             <td class="w-140">
                                                 <mat-form-field floatLabel="never" class="w-100-p">
                                                     <mat-label>{{ 'PRODUCT.PRICE' | translate }}</mat-label>
-                                                    <input matInput placeholder="{{ 'PRODUCT.PRICE' | translate }}"
-                                                        name="price" formControlName="price" required>
+                                                    <input matInput placeholder="{{ 'PRODUCT.PRICE' | translate }}" name="price" formControlName="price" required>
                                                 </mat-form-field>
                                             </td>
                                             <td class="w-140">
                                                 <mat-form-field floatLabel="never" class="w-100-p">
                                                     <mat-label>{{ 'PRODUCT.QUANTITY' | translate }}</mat-label>
-                                                    <input matInput placeholder="{{ 'PRODUCT.QUANTITY' | translate }}"
-                                                        name="quantity" formControlName="quantity" required>
+                                                    <input matInput placeholder="{{ 'PRODUCT.QUANTITY' | translate }}" name="quantity" formControlName="quantity" required>
                                                 </mat-form-field>
                                             </td>
                                             <td class="text-center">
