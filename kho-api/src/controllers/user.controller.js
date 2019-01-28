@@ -22,7 +22,9 @@ async function list(req, res, next) {
     if (filter.username) {
         query.username = {'$regex': filter.username};
     }
-
+    if (filter.role) {
+        query.role = filter.role;
+    }
     const options = {
         page,
         limit,

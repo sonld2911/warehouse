@@ -15,6 +15,7 @@ const PurchaseOrderSchema = new mongoose.Schema({
         default: 0,
         min: 0,
     },
+    assignees: {},
     managerDepartment: String,
     products: [{
         product: {
