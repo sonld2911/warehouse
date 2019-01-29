@@ -109,8 +109,22 @@ async function findOne(req, res, next) {
         if (!item) {
             return next('error 404 product not found');
         }
-        const user = await User.findById(item.assignees.user.id);
-        item.assignees.user["name"] = user.name;
+        if (item.assignees.user.id){
+            let user = await User.findById(item.assignees.user.id);
+            item.assignees.user["name"] = user.name;
+        }
+        if (item.assignees.repair.id){
+            let repair = await User.findById(item.assignees.repair.id);
+            item.assignees.repair["name"] = repair.name;
+        }
+        if (item.assignees.technical.id){
+            let technical = await User.findById(item.assignees.technical.id);
+            item.assignees.technical["name"] = technical.name;
+        }
+        if (item.assignees.stocker.id){
+            let stocker = await User.findById(item.assignees.stocker.id);
+            item.assignees.stocker["name"] = stocker.name;
+        }
         return res.json(item);
     } catch (err) {
         // TODO: handle error
@@ -244,26 +258,26 @@ async function invoiceApproval(req, res, next) {
                     if (status != 'true'){
                         output = {
                             status: "rejected",
-                        }
+                        };
                         break;
                     }
                     listAssignees.stocker = {id: assignees, status: "pending", dateTime: new Date()}
                     output = {
                         assignees: listAssignees
-                    }
+                    };
                     break;
                 case "stocker":
                     if (user.id = listAssignees.technical.id  && listAssignees.stocker.status == "pending")
                         listAssignees.stocker = {
                                 status: (status == 'true')?"accepted":"rejected",
                                 dateTime: new Date()
-                            }
+                            };
                     else
                         return res.status(400).json({});
                     output = {
                         status: (status == 'true')?"accepted":"rejected",
                         assignees: listAssignees
-                    }
+                    };
                     break;
             }
             console.log(assignees);
