@@ -4,6 +4,7 @@ import { get, omitBy, isNil, sumBy } from 'lodash';
 
 import { DEFAULT_PAGE_LIMIT } from '../enums';
 import { now } from 'moment';
+import { stat } from 'fs';
 
 async function find(req, res, next) {
     const { PurchaseOrder, User } = req.app.get('models');
@@ -207,45 +208,66 @@ async function invoiceApproval(req, res, next) {
                 let statistical = product.product.statistical;
                 if (item.orderType == "in")
                     statistical[product.productType]+=product.quantity;
-                else{
-                    // let calculator = statistical[product.productType] - product.quantity;
-                    // if(calculator<0) return res.status(400).json({});
-                    // statistical[product.productType]-=product.quantity;
-                }
+                // else{
+                //     // let calculator = statistical[product.productType] - product.quantity;
+                //     // if(calculator<0) return res.status(400).json({});
+                //     // statistical[product.productType]-=product.quantity;
+                // }
                 await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
             });
         }
         if (item.orderType == "out"){
-            let output = item.assignees;
-
+            let listAssignees = item.assignees;
+            let output = {};
             switch (user.role) {
-                case "user":
-                    output.assignees.user = {id: user.id,
-                         status: (status == 'true')?"accepted":"rejected",
-                          dateTime: new Date()}
-                    output.assignees.repair = {id: assignees, status: "pending", dateTime: new Date()}
-                    break;
                 case "repair":
-                    output.assignees.repair = {id: user.id,
-                        status: (status == 'true')?"accepted":"rejected",
-                            dateTime: new Date()}
-                    output.assignees.technical = {id: assignees, status: "pending", dateTime: new Date()}
+                    if (assignees && user.id == listAssignees.repair.id &&  listAssignees.repair.status == "pending")
+                        listAssignees.repair = {
+                                status: (status == 'true')?"accepted":"rejected",
+                                dateTime: new Date()
+                                }
+                    else
+                        return res.status(400).json({});
+                    listAssignees.technical = {id: assignees, status: "pending", dateTime: new Date()}
+                    output = {
+                        assignees: listAssignees
+                    }
                     break;
                 case "technical":
-                    output.assignees.repair = {id: user.id,
-                        status: (status == 'true')?"accepted":"rejected",
-                            dateTime: new Date()}
-                    output.assignees.technical = {id: assignees, status: "pending", dateTime: new Date()}
+                    if (user.id = listAssignees.technical.id  && listAssignees.technical.status == "pending")
+                        listAssignees.technical = {
+                                status: (status == 'true')?"accepted":"rejected",
+                                dateTime: new Date()
+                            }
+                    else
+                        return res.status(400).json({});
+                    if (status != 'true'){
+                        output = {
+                            status: "rejected",
+                        }
+                        break;
+                    }
+                    listAssignees.stocker = {id: assignees, status: "pending", dateTime: new Date()}
+                    output = {
+                        assignees: listAssignees
+                    }
                     break;
                 case "stocker":
-                    role = "stocker";
+                    if (user.id = listAssignees.technical.id  && listAssignees.stocker.status == "pending")
+                        listAssignees.stocker = {
+                                status: (status == 'true')?"accepted":"rejected",
+                                dateTime: new Date()
+                            }
+                    else
+                        return res.status(400).json({});
+                    output = {
+                        status: (status == 'true')?"accepted":"rejected",
+                        assignees: listAssignees
+                    }
                     break;
             }
-            await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
-                {
-                    status: (status == 'true')?"accepted":"rejected",
-                    updatedBy: user.id
-                });
+            console.log(assignees);
+            await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId}, output);
             }
         else
             await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
