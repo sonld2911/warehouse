@@ -18,6 +18,10 @@ import { PurchaseOrderSearchDialogComponent } from '@app/main/warehouse/purchase
 import { WarehouseImportDataSource } from '../warehouse-import.data-source';
 import { WarehouseImportService } from '../warehouse-import.service';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
+import { AuthenticationService } from '@shared/modules/authentication';
+import { User } from '@shared/models';
+
+
 
 @Component({
     selector: 'app-warehouse-import',
@@ -35,6 +39,7 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
 
     public dataSource: WarehouseImportDataSource;
     public dataSource2: WarehouseImportDataSource;
+    public loggedInUser: User;
 
 
     public displayedColumns: string[] = [
@@ -66,6 +71,8 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
     public readonly PURCHASE_ORDER_TYPE = PURCHASE_ORDER_TYPE;
 
     private unsubscribe$: Subject<any>;
+    private unsubscribeAll: Subject<any>;
+
 
     constructor(
         private route: ActivatedRoute,
@@ -75,13 +82,23 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
         private warehouseImportService: WarehouseImportService,
         private fuseProgressBarService: FuseProgressBarService,
         private notifier: NotifierService,
+        private auth: AuthenticationService,
+
     ) {
         this.searchInput = new FormControl('');
 
         this.unsubscribe$ = new Subject();
+        this.unsubscribeAll = new Subject<any>();
+
     }
 
     ngOnInit(): void {
+        this.auth.user
+            .pipe(takeUntil(this.unsubscribeAll))
+            .subscribe((user: User) => {
+                this.loggedInUser = user;
+            });
+            console.log(this.loggedInUser.isRepairRole)
         this.route.parent.url
             .pipe(
                 map((urlSegments: UrlSegment[]) => get(first(urlSegments), 'path', 'import')),
@@ -134,6 +151,8 @@ export class WarehouseImportComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
+        this.unsubscribeAll.next();
+        this.unsubscribeAll.complete();
     }
 
     private _init(): void {

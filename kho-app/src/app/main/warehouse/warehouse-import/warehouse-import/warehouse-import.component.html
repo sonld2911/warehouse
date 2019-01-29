@@ -8,8 +8,7 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row"
-            fxLayoutAlign.gt-sm="space-between center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
 
             <!-- APP TITLE -->
             <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
@@ -20,7 +19,7 @@
                     <ng-container *ngIf="viewPath === 'import'">
                         {{ 'PURCHASE_ORDER.TITLES.PAGE_IMPORT' | translate }}
                     </ng-container>
-                    <ng-container *ngIf="viewPath === 'export'">
+                    <ng-container *ngIf="viewPath === 'export' ">
                         {{ 'PURCHASE_ORDER.TITLES.PAGE_EXPORT' | translate }}
                     </ng-container>
                     <ng-container *ngIf="viewPath === 'approver'">
@@ -36,8 +35,7 @@
                     <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
                         <mat-icon>search</mat-icon>
                         <input fxFlex="1 1 100%" [formControl]="searchInput" placeholder="{{ 'COMMON.MESSAGES.SEARCH_PLACEHOLDER' | translate }}">
-                        <button mat-icon-button matTooltip="{{ 'COMMON.MESSAGES.MORE_SEARCH_TOOLTIP' | translate }}"
-                            (click)="openSearchDialog()">
+                        <button mat-icon-button matTooltip="{{ 'COMMON.MESSAGES.MORE_SEARCH_TOOLTIP' | translate }}" (click)="openSearchDialog()">
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
                     </div>
@@ -53,7 +51,7 @@
                 </button>
             </ng-container>
 
-            <ng-container *ngIf="isExportOrderType && viewPath !== 'approver'">
+            <ng-container *ngIf="isExportOrderType && viewPath !== 'approver'&& !loggedInUser?.isRepairRole">
                 <button mat-raised-button routerLink="/warehouse/export/new" class="add-product-button fuse-white mt-24 mt-md-0">
                     <mat-icon>playlist_add</mat-icon>
                     <span>{{ 'PURCHASE_ORDER.BUTTONS.NEW_EXPORT' | translate }}</span>
@@ -71,41 +69,41 @@
                 <mat-table class="purchase-orders-table" [dataSource]="dataSource2" [@animateStagger]="{value:'50'}">
 
                     <ng-container matColumnDef="id">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.ID' |
-                            translate
-                            }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.ID' | translate
+                            }}
+                        </mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             <span class="text-truncate">{{item.id}}</span>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="location">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.LOCATION' |
-                            translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.LOCATION' | translate
+                            }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.location}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="areas">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.AREAS' |
-                            translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.AREAS' | translate
+                            }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.areas}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="managerDepartment">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{
-                            'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT'
+                            | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.managerDepartment}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="subtotal">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.SUBTOTAL' |
-                            translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.SUBTOTAL' | translate
+                            }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.subtotal | currency:'VND'}}
                         </mat-cell>
@@ -147,46 +145,45 @@
 
             </ng-container>
 
-            <ng-container *ngIf=" viewPath !== 'approver'" >
-                <mat-table class="purchase-orders-table" #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}"
-                    fusePerfectScrollbar>
+            <ng-container *ngIf=" viewPath !== 'approver'">
+                <mat-table class="purchase-orders-table" #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
 
                     <ng-container matColumnDef="id">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.ID' |
-                            translate
-                            }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.ID' | translate
+                            }}
+                        </mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             <span class="text-truncate">{{item.id}}</span>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="location">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.LOCATION' |
-                            translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.LOCATION' | translate
+                            }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.location}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="areas">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.AREAS' |
-                            translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.AREAS' | translate
+                            }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.areas}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="managerDepartment">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{
-                            'PURCHASE_ORDER.MANAGER_DEPARTMENT' | translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.MANAGER_DEPARTMENT'
+                            | translate }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.managerDepartment}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="subtotal">
-                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.SUBTOTAL' |
-                            translate }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef fxLayoutAlign="center center">{{ 'PURCHASE_ORDER.SUBTOTAL' | translate
+                            }}</mat-header-cell>
                         <mat-cell *matCellDef="let item" fxLayoutAlign="center center">
                             {{item.subtotal | currency:'VND'}}
                         </mat-cell>
@@ -239,16 +236,18 @@
                             <ng-container *ngIf="item.isStatusPending">
                                 <ng-container *ngIf="!loggedInUser?.isUserRole">
 
-                                <button mat-icon-button color="accent" matTooltip="{{ 'COMMON.BUTTONS.EDIT' | translate }}"
-                                    (click)="$event.stopPropagation()" [routerLink]="'/warehouse/' + viewPath + '/edit/' + item.id">
-                                    <mat-icon>edit</mat-icon>
-                                </button>
-                            </ng-container>
+                                    <button mat-icon-button color="accent" matTooltip="{{ 'COMMON.BUTTONS.EDIT' | translate }}" (click)="$event.stopPropagation()"
+                                        [routerLink]="'/warehouse/' + viewPath + '/edit/' + item.id">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </ng-container>
+                                <ng-container *ngIf="!loggedInUser?.isRepairRole">
 
-                                <button mat-icon-button color="warn" matTooltip="{{ 'COMMON.BUTTONS.DELETE' | translate }}"
-                                    (click)="$event.stopPropagation(); remove(item)">
+                                <button mat-icon-button color="warn" matTooltip="{{ 'COMMON.BUTTONS.DELETE' | translate }}" (click)="$event.stopPropagation(); remove(item)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
+                            </ng-container>
+                                
                             </ng-container>
 
                         </mat-cell>
@@ -261,7 +260,7 @@
                     </mat-row>
 
                 </mat-table>
-<!-- 
+                <!-- 
                 <mat-paginator #paginator [length]="dataSource.count" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
                 </mat-paginator> -->
             </ng-container>

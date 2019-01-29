@@ -6,7 +6,7 @@ export const environment = {
     production: false,
     hmr: false,
     api: {
-        endPoint: 'http://localhost:3000/api',
+        endPoint: 'http://192.168.13.106:3000/api',
     },
 };
 

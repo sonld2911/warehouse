@@ -4,7 +4,7 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { PurchaseOrderDetailComponent } from './purchase-order-detail.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule, MatIconModule, MatTabsModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatTabsModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -15,6 +15,7 @@ import { MatButtonModule, MatIconModule, MatTabsModule } from '@angular/material
         MatIconModule,
         MatButtonModule,
         MatTabsModule,
+        MatSelectModule,
     ],
     declarations: [
         PurchaseOrderDetailComponent,

@@ -158,7 +158,7 @@
                                                     <span class="orange-500-fg">{{ 'PURCHASE_ORDER.STATUSES.PENDING' | translate
                                                         }}
                                                     </span> <span *ngIf="data.purchaseOrder?.assignees.stocker.name===nulll"></span><span
-                                                    *ngIf="data.purchaseOrder?.assignees.stocker.name!==nulll">&nbsp;-&nbsp;{{data.purchaseOrder?.stocker.name}}</span>
+                                                        *ngIf="data.purchaseOrder?.assignees.stocker.name!==nulll">&nbsp;-&nbsp;{{data.purchaseOrder?.stocker.name}}</span>
                                                 </ng-container>
                                                 <ng-container *ngIf="data.purchaseOrder?.assignees.stocker.status==='accepted'">
                                                     <mat-icon class="green-500-fg mr-4">check_circle</mat-icon>
@@ -224,6 +224,20 @@
                                             <td>{{ 'PURCHASE_ORDER.UPDATED_AT' | translate }}</td>
                                             <td>{{ data.purchaseOrder?.updatedAt | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                                         </tr>
+
+                                        <ng-container>
+                                            <tr>
+                                                <td>
+                                                    Người Duyệt Đơn
+                                                </td>
+                                                <td>
+                                                    <mat-select placeholder="Người Duyệt Đơn" name="assignees" formControlName="assignees" required>
+
+                                                    </mat-select>
+                                                </td>
+                                            </tr>
+
+                                        </ng-container>
                                     </tbody>
                                 </table>
 
