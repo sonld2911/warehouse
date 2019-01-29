@@ -101,7 +101,9 @@ UserSchema.statics.findByUsername = function findByUsername(username) {
 UserSchema.statics.findByRoleAndWarehouseId = function findBytrungtn(role, warehouseId) {
     return this.find({role: role, warehouseId:warehouseId});
 };
-
+UserSchema.statics.findByIdAndRoleAndWarehouseId = function findBytrungtn(id, role, warehouseId) {
+    return this.find({id: id, role: role, warehouseId:warehouseId});
+};
 UserSchema.set('toJSON', {
     transform: function (doc, ret) {
         return mappingResponse(ret);

@@ -34,6 +34,7 @@ routes.delete('/users/:id', UserController.remove);
 routes.use('/purchase-orders', authenticate());
 routes.get('/purchase-orders', PurchaseOrderController.find);
 routes.get('/purchase-orders/invoice_management', PurchaseOrderController.invoiceManagement);
+routes.get('/purchase-orders/assignees', PurchaseOrderController.getAssignees);
 routes.get('/purchase-orders/:id', PurchaseOrderController.findOne);
 routes.post('/purchase-orders', PurchaseOrderController.create);
 routes.patch('/purchase-orders/:id', PurchaseOrderController.update);
