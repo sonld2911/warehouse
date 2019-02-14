@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- 
+
 from xlrd import open_workbook
 
 class Arm(object):
@@ -16,28 +18,26 @@ class Arm(object):
                .format(self.id, self.name, self.eamil,
                        self.date))
 
-wb = open_workbook("data_nal.xlsx")
-print(wb.sheets())
+wb = open_workbook("./BaoCaoXuatNhapTon.xlsx")
+# wb = open_workbook("./data_nal.xlsx")
 for sheet in wb.sheets():
     number_of_rows = sheet.nrows
     number_of_columns = sheet.ncols
 
     items = []
-
-    rows = []
-    for row in range(1, number_of_rows):
+    for row in range(14, number_of_rows):
         values = []
         for col in range(number_of_columns):
             value  = (sheet.cell(row,col).value)
             try:
-                value = str(int(value))
+                value = str(int(value)).encode('UTF-8')
             except ValueError:
                 pass
             finally:
                 values.append(value)
-        item = Arm(*values)
-        print(values)
-        items.append(item)
+        # item = Arm(*values)
+        print(values[0])
+        # items.append(item)
 
 # for item in items:
 #     print(item)

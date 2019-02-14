@@ -112,19 +112,23 @@ async function findOne(req, res, next) {
         if (item.assignees.user.id){
             let user = await User.findById(item.assignees.user.id);
             item.assignees.user["name"] = user.name;
-        }
+        }else
+            item.assignees.user["name"] = "";
         if (item.assignees.repair.id){
             let repair = await User.findById(item.assignees.repair.id);
             item.assignees.repair["name"] = repair.name;
-        }
+        }else
+            item.assignees.repair["name"] = "";
         if (item.assignees.technical.id){
             let technical = await User.findById(item.assignees.technical.id);
             item.assignees.technical["name"] = technical.name;
-        }
+        }else
+            item.assignees.technical["name"] = "";
         if (item.assignees.stocker.id){
             let stocker = await User.findById(item.assignees.stocker.id);
             item.assignees.stocker["name"] = stocker.name;
-        }
+        }else
+            item.assignees.stocker["name"] = "";
         return res.json(item);
     } catch (err) {
         // TODO: handle error
@@ -149,7 +153,7 @@ async function create(req, res, next) {
             return next('error 404 assignees not found');
         data.assignees = {
             user: {id: user.id, status: "accepted", dateTime: new Date()},
-            repair: {id: "", status: "pending", dateTime: ""},
+            repair: {id: assignees, status: "pending", dateTime: ""},
             technical: {id: "", status: "pending", dateTime: ""},
             stocker: {id: "", status: "pending", dateTime: ""}};
         const purchaseOrder = await PurchaseOrder.create(data);
@@ -217,19 +221,7 @@ async function invoiceApproval(req, res, next) {
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
         if (!item || item.status != "pending") return res.status(404).json({});
-        if(status){
-            item.products.map( async (product)=>{
-                let statistical = product.product.statistical;
-                if (item.orderType == "in")
-                    statistical[product.productType]+=product.quantity;
-                // else{
-                //     // let calculator = statistical[product.productType] - product.quantity;
-                //     // if(calculator<0) return res.status(400).json({});
-                //     // statistical[product.productType]-=product.quantity;
-                // }
-                await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
-            });
-        }
+       
         if (item.orderType == "out"){
             let listAssignees = item.assignees;
             let output = {};
@@ -283,12 +275,26 @@ async function invoiceApproval(req, res, next) {
             console.log(assignees);
             await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId}, output);
             }
-        else
+        else{
+            if(status){
+                item.products.map( async (product)=>{
+                    let statistical = product.product.statistical;
+                    // else{
+                    //     // let calculator = statistical[product.productType] - product.quantity;
+                    //     // if(calculator<0) return res.status(400).json({});
+                    //     // statistical[product.productType]-=product.quantity;
+                    // }
+                    statistical[product.productType]+=product.quantity;
+                    await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
+                });
+            }
             await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
                 {
                     status: (status == 'true')?"accepted":"rejected",
                     updatedBy: user.id
                 });
+        }
+           
         return res.status(204).json(item);
     } catch (err) {
         return next(err);
