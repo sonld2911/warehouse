@@ -213,7 +213,7 @@ async function remove(req, res, next) {
 }
 
 async function invoiceApproval(req, res, next) {
-    const { PurchaseOrder, Product } = req.app.get('models');
+    const { PurchaseOrder, Product, User } = req.app.get('models');
     const { id } = req.params;
     const user = req.user;
     const status = get(req.query, 'status', false);
@@ -238,6 +238,13 @@ async function invoiceApproval(req, res, next) {
                     output = {
                         assignees: listAssignees
                     }
+                    user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "technical", user.warehouseId);
+                    user_assignees.map((user)=>{sendNotification({
+                        purchaseOrderId: id,
+                        badge: 0,
+                        title: "Bạn có 1 tin nhắn mới",
+                        body: 'Có một đơn chờ chuyệt'
+                    }, user.username)});
                     break;
                 case "technical":
                     if (user.id = listAssignees.technical.id  && listAssignees.technical.status == "pending")
@@ -257,9 +264,16 @@ async function invoiceApproval(req, res, next) {
                     output = {
                         assignees: listAssignees
                     };
+                    user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "stocker", user.warehouseId);
+                    user_assignees.map((user)=>{sendNotification({
+                        purchaseOrderId: id,
+                        badge: 0,
+                        title: "Bạn có 1 tin nhắn mới",
+                        body: 'Có một đơn chờ chuyệt'
+                    }, user.username)});
                     break;
                 case "stocker":
-                    if (user.id = listAssignees.technical.id  && listAssignees.stocker.status == "pending")
+                    if (user.id = listAssignees.stocker.id  && listAssignees.stocker.status == "pending")
                         listAssignees.stocker = {
                                 status: (status == 'true')?"accepted":"rejected",
                                 dateTime: new Date()
@@ -270,6 +284,15 @@ async function invoiceApproval(req, res, next) {
                         status: (status == 'true')?"accepted":"rejected",
                         assignees: listAssignees
                     };
+                    if(status){
+                        item.products.map( async (product)=>{
+                            let statistical = product.product.statistical;
+                            let calculator = statistical[product.productType] - product.quantity;
+                            if(calculator<0) return res.status(400).json({});
+                            statistical[product.productType]-=product.quantity;
+                            await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
+                        });
+                    }
                     break;
             }
             console.log(assignees);
