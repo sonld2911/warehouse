@@ -109,26 +109,28 @@ async function findOne(req, res, next) {
         if (!item) {
             return next('error 404 product not found');
         }
-        if (item.assignees.user.id){
-            let user = await User.findById(item.assignees.user.id);
-            item.assignees.user["name"] = user.name;
-        }else
-            item.assignees.user["name"] = "";
-        if (item.assignees.repair.id){
-            let repair = await User.findById(item.assignees.repair.id);
-            item.assignees.repair["name"] = repair.name;
-        }else
-            item.assignees.repair["name"] = "";
-        if (item.assignees.technical.id){
-            let technical = await User.findById(item.assignees.technical.id);
-            item.assignees.technical["name"] = technical.name;
-        }else
-            item.assignees.technical["name"] = "";
-        if (item.assignees.stocker.id){
-            let stocker = await User.findById(item.assignees.stocker.id);
-            item.assignees.stocker["name"] = stocker.name;
-        }else
-            item.assignees.stocker["name"] = "";
+        if (item.orderType == "out"){
+            if (item.assignees.user.id){
+                let user = await User.findById(item.assignees.user.id);
+                item.assignees.user["name"] = user.name;
+            }else
+                item.assignees.user["name"] = "";
+            if (item.assignees.repair.id){
+                let repair = await User.findById(item.assignees.repair.id);
+                item.assignees.repair["name"] = repair.name;
+            }else
+                item.assignees.repair["name"] = "";
+            if (item.assignees.technical.id){
+                let technical = await User.findById(item.assignees.technical.id);
+                item.assignees.technical["name"] = technical.name;
+            }else
+                item.assignees.technical["name"] = "";
+            if (item.assignees.stocker.id){
+                let stocker = await User.findById(item.assignees.stocker.id);
+                item.assignees.stocker["name"] = stocker.name;
+            }else
+                item.assignees.stocker["name"] = "";
+        }
         return res.json(item);
     } catch (err) {
         // TODO: handle error

@@ -100,6 +100,9 @@ async function update(req, res, next) {
             description: get(req.body, 'description'),
             manufacturer: get(req.body, 'manufacturer'),
             machinePart: get(req.body, 'machinePart'),
+            technicalSpecifications: get(req.body, 'technicalSpecifications'),
+            unit: get(req.body, 'unit'),
+            kind: get(req.body, 'kind'),
         }, isNil);
 
         for (const key in data) {

@@ -22,6 +22,21 @@ const ProductSchema = new mongoose.Schema({
         trim: true,
         default: '',
     },
+    technicalSpecifications: {
+        type: String,
+        trim: true,
+        default: '',
+    },
+    unit: {
+        type: String,
+        trim: true,
+        default: '',
+    },
+    kind: {
+        type: String,
+        trim: true,
+        default: '',
+    },
     manufacturer: {
         type: String,
         trim: true,
