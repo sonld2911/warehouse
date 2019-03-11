@@ -105,7 +105,7 @@ async function findOne(req, res, next) {
     try {
         const item = await PurchaseOrder
             .findById(id)
-            .populate('products.product');
+            .populate('products.product').populate('createdBy').populate('updatedBy');
         if (!item) {
             return next('error 404 product not found');
         }
@@ -223,24 +223,23 @@ async function invoiceApproval(req, res, next) {
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
         if (!item || item.status != "pending") return res.status(404).json({});
-       
+
         if (item.orderType == "out"){
             let listAssignees = item.assignees;
             let output = {};
             switch (user.role) {
                 case "repair":
-                    if (assignees && user.id == listAssignees.repair.id &&  listAssignees.repair.status == "pending")
-                        listAssignees.repair = {
-                                status: (status == 'true')?"accepted":"rejected",
-                                dateTime: new Date()
-                                }
+                    if (assignees && user.id == listAssignees.repair.id &&  listAssignees.repair.status == "pending"){
+                        listAssignees.repair["status"] = (status == 'true')?"accepted":"rejected";
+                        listAssignees.repair["dateTime"] = new Date();
+                    }
                     else
                         return res.status(400).json({});
-                    listAssignees.technical = {id: assignees, status: "pending", dateTime: new Date()}
+                    listAssignees.technical = {id: assignees, status: "pending", dateTime: new Date()};
                     output = {
                         assignees: listAssignees
-                    }
-                    user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "technical", user.warehouseId);
+                    };
+                    let user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "technical", user.warehouseId);
                     user_assignees.map((user)=>{sendNotification({
                         purchaseOrderId: id,
                         badge: 0,
@@ -249,11 +248,10 @@ async function invoiceApproval(req, res, next) {
                     }, user.username)});
                     break;
                 case "technical":
-                    if (user.id = listAssignees.technical.id  && listAssignees.technical.status == "pending")
-                        listAssignees.technical = {
-                                status: (status == 'true')?"accepted":"rejected",
-                                dateTime: new Date()
-                            }
+                    if (user.id = listAssignees.technical.id  && listAssignees.technical.status == "pending"){
+                        listAssignees.technical["status"] = (status == 'true')?"accepted":"rejected";
+                        listAssignees.technical["dateTime"] = new Date();
+                    }
                     else
                         return res.status(400).json({});
                     if (status != 'true'){
@@ -275,11 +273,10 @@ async function invoiceApproval(req, res, next) {
                     }, user.username)});
                     break;
                 case "stocker":
-                    if (user.id = listAssignees.stocker.id  && listAssignees.stocker.status == "pending")
-                        listAssignees.stocker = {
-                                status: (status == 'true')?"accepted":"rejected",
-                                dateTime: new Date()
-                            };
+                    if (user.id = listAssignees.stocker.id  && listAssignees.stocker.status == "pending"){
+                        listAssignees.stocker["status"] = (status == 'true')?"accepted":"rejected";
+                        listAssignees.stocker["dateTime"] = new Date();
+                    }
                     else
                         return res.status(400).json({});
                     output = {
@@ -319,14 +316,14 @@ async function invoiceApproval(req, res, next) {
                     updatedBy: user.id
                 });
         }
-           
+
         return res.status(204).json(item);
     } catch (err) {
         return next(err);
     }
 }
 async function getAssignees(req, res, next){
-    
+
     const { PurchaseOrder, User } = req.app.get('models');
     const id = get(req.query, 'id', null);
     const user = req.user;
