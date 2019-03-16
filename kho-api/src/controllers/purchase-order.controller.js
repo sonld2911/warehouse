@@ -1,13 +1,22 @@
 'use strict';
 
-import { get, omitBy, isNil, sumBy } from 'lodash';
+import {get, omitBy, isNil, sumBy} from 'lodash';
 
-import { DEFAULT_PAGE_LIMIT } from '../enums';
-import { now } from 'moment';
-import { stat } from 'fs';
+import {DEFAULT_PAGE_LIMIT, ROLE, PURCHASE_ORDER_STATUS} from '../enums';
+import {now} from 'moment';
+import {stat} from 'fs';
+
+const Pusher = require('pusher');
+const pusher = new Pusher({
+    appId: '665346',
+    key: 'bbe0eadeb38f6154df71',
+    secret: 'b04faba27d6ad9ad5bb0',
+    cluster: 'ap1',
+    encrypted: true
+});
 
 async function find(req, res, next) {
-    const { PurchaseOrder, User } = req.app.get('models');
+    const {PurchaseOrder, User} = req.app.get('models');
 
     const limit = parseInt(get(req.query, 'limit', DEFAULT_PAGE_LIMIT));
 
@@ -54,26 +63,19 @@ async function find(req, res, next) {
         return next(err);
     }
 }
-async function sendNotification(data, to="notifications"){
-    let Pusher = require('pusher');
-    let pusher = new Pusher({
-        appId: '665346',
-        key: 'bbe0eadeb38f6154df71',
-        secret: 'b04faba27d6ad9ad5bb0',
-        cluster: 'ap1',
-        encrypted: true
-    });
 
-    pusher.trigger(to, 'post_updated',data);
+async function sendNotification(data, to = "notifications") {
+    console.log("sen to" + to);
+    await pusher.trigger(to, 'post_updated', data);
 }
 
-async function invoiceManagement(req, res, next){
-    const { PurchaseOrder, User } = req.app.get('models');
+async function invoiceManagement(req, res, next) {
+    const {PurchaseOrder, User} = req.app.get('models');
     const user = req.user;
     try {
         const items = await PurchaseOrder.aggregate([
-            { $match: {warehouseId: user.warehouseId} },
-            {$project:{status: 1, orderType: 1}}
+            {$match: {warehouseId: user.warehouseId}},
+            {$project: {status: 1, orderType: 1}}
         ]);
         let data = {
             in: {
@@ -88,7 +90,7 @@ async function invoiceManagement(req, res, next){
             }
         };
         items.map(item => {
-            data[item.orderType][item.status]+=1;
+            data[item.orderType][item.status] += 1;
         });
         if (!items) {
             return next('error 404 product not found');
@@ -99,37 +101,20 @@ async function invoiceManagement(req, res, next){
         return next(err);
     }
 }
+
 async function findOne(req, res, next) {
-    const { PurchaseOrder, User } = req.app.get('models');
-    const { id } = req.params;
+    const {PurchaseOrder, User} = req.app.get('models');
+    const {id} = req.params;
     try {
         const item = await PurchaseOrder
             .findById(id)
-            .populate('products.product').populate('createdBy').populate('updatedBy');
+            .populate('products.product')
+            .populate('createdBy')
+            .populate('updatedBy')
+            .populate('assignees.user')
+            .populate('approval');
         if (!item) {
             return next('error 404 product not found');
-        }
-        if (item.orderType == "out"){
-            if (item.assignees.user.id){
-                let user = await User.findById(item.assignees.user.id);
-                item.assignees.user["name"] = user.name;
-            }else
-                item.assignees.user["name"] = "";
-            if (item.assignees.repair.id){
-                let repair = await User.findById(item.assignees.repair.id);
-                item.assignees.repair["name"] = repair.name;
-            }else
-                item.assignees.repair["name"] = "";
-            if (item.assignees.technical.id){
-                let technical = await User.findById(item.assignees.technical.id);
-                item.assignees.technical["name"] = technical.name;
-            }else
-                item.assignees.technical["name"] = "";
-            if (item.assignees.stocker.id){
-                let stocker = await User.findById(item.assignees.stocker.id);
-                item.assignees.stocker["name"] = stocker.name;
-            }else
-                item.assignees.stocker["name"] = "";
         }
         return res.json(item);
     } catch (err) {
@@ -139,7 +124,7 @@ async function findOne(req, res, next) {
 }
 
 async function create(req, res, next) {
-    const { PurchaseOrder, User } = req.app.get('models');
+    const {PurchaseOrder, User} = req.app.get('models');
     const user = req.user;
     const assignees = get(req.body, 'assignees', null);
     const data = req.body;
@@ -147,26 +132,29 @@ async function create(req, res, next) {
     data.createdBy = user.id;
     try {
         let user_assignees;
-        if (assignees && req.body.orderType == "out")
-            user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "repair", user.warehouseId);
-        else
+        if (assignees && req.body.orderType == "out") {
+            user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, ROLE.REPAIR, user.warehouseId);
+            data.assignees = [
+                {user: user.id, status: PURCHASE_ORDER_STATUS.ACCEPTED, dateTime: new Date()},
+                {user: assignees, status: PURCHASE_ORDER_STATUS.PENDING, dateTime: new Date()}
+            ];
+            data.approval = assignees;
+        } else
             user_assignees = await User.findByRoleAndWarehouseId("stocker", user.warehouseId);
+        console.log("trungtn", user_assignees);
         if (!user_assignees)
             return next('error 404 assignees not found');
-        data.assignees = {
-            user: {id: user.id, status: "accepted", dateTime: new Date()},
-            repair: {id: assignees, status: "pending", dateTime: ""},
-            technical: {id: "", status: "pending", dateTime: ""},
-            stocker: {id: "", status: "pending", dateTime: ""}};
         const purchaseOrder = await PurchaseOrder.create(data);
         const badge = await PurchaseOrder.find({'status': 'pending'}).count();
         // TODO: handle response format
-        user_assignees.map((user)=>{sendNotification({
-            purchaseOrderId: purchaseOrder.id,
-            badge: badge,
-            title: "Bạn có 1 tin nhắn mới",
-            body: 'Có một đơn chờ chuyệt'
-        }, user.username)});
+        user_assignees.map((user) => {
+            sendNotification({
+                purchaseOrderId: purchaseOrder.id,
+                badge: badge,
+                title: "Bạn có 1 tin nhắn mới",
+                body: 'Có một đơn chờ chuyệt'
+            }, user.username)
+        });
         return res.json(purchaseOrder);
     } catch (err) {
         // TODO: validate write error
@@ -175,9 +163,9 @@ async function create(req, res, next) {
 }
 
 async function update(req, res, next) {
-    const { PurchaseOrder } = req.app.get('models');
-    const { id } = req.params;
-    const { user } = req;
+    const {PurchaseOrder, User} = req.app.get('models');
+    const {id} = req.params;
+    const {user} = req;
     const data = req.body;
 
     try {
@@ -192,7 +180,19 @@ async function update(req, res, next) {
         for (const key in data) {
             purchaseOrder[key] = data[key];
         }
-
+        if (purchaseOrder.orderType == "out" && user.role == "stocker") {
+            for (let i = 0; i < purchaseOrder.assignees.length; i++) {
+                purchaseOrder.assignees[i].status = PURCHASE_ORDER_STATUS.PENDING;
+            }
+            purchaseOrder.approval = purchaseOrder.assignees[0].user;
+            let sendToUser = await User.find({_id: purchaseOrder.assignees[0].user});
+            await sendNotification({
+                purchaseOrderId: id,
+                badge: 0,
+                title: "Bạn có 1 tin nhắn mới",
+                body: 'Có một đơn chờ chuyệt'
+            }, sendToUser.username)
+        }
         await purchaseOrder.save();
 
         return res.json(purchaseOrder);
@@ -202,12 +202,11 @@ async function update(req, res, next) {
 }
 
 async function remove(req, res, next) {
-    const { PurchaseOrder } = req.app.get('models');
-    const { id } = req.params;
+    const {PurchaseOrder} = req.app.get('models');
+    const {id} = req.params;
 
     try {
         await PurchaseOrder.findByIdAndDelete(id);
-
         return res.status(204).json({});
     } catch (err) {
         return next(err);
@@ -215,121 +214,118 @@ async function remove(req, res, next) {
 }
 
 async function invoiceApproval(req, res, next) {
-    const { PurchaseOrder, Product, User } = req.app.get('models');
-    const { id } = req.params;
+    const {PurchaseOrder, Product, User} = req.app.get('models');
+    const {id} = req.params;
     const user = req.user;
     const status = get(req.query, 'status', false);
     const assignees = get(req.query, 'assignees', null);
     try {
         const item = await PurchaseOrder.findById(id).populate('products.product');
-        if (!item || item.status != "pending") return res.status(404).json({});
+        if (!item || item.status != "pending") return res.status(403).json(null);
 
-        if (item.orderType == "out"){
+        if (item.orderType == "out") {
             let listAssignees = item.assignees;
             let output = {};
-            switch (user.role) {
-                case "repair":
-                    if (assignees && user.id == listAssignees.repair.id &&  listAssignees.repair.status == "pending"){
-                        listAssignees.repair["status"] = (status == 'true')?"accepted":"rejected";
-                        listAssignees.repair["dateTime"] = new Date();
-                    }
-                    else
-                        return res.status(400).json({});
-                    listAssignees.technical = {id: assignees, status: "pending", dateTime: new Date()};
+            if (item.assignees.length < 4) {
+                listAssignees[listAssignees.length - 1].status = (status == 'true') ? PURCHASE_ORDER_STATUS.ACCEPTED : PURCHASE_ORDER_STATUS.REJECTED;
+                listAssignees[listAssignees.length - 1].dateTime = new Date();
+                if (user.role == ROLE.TECHNICAL && !(status == 'true')) {
                     output = {
+                        status: PURCHASE_ORDER_STATUS.REJECTED,
                         assignees: listAssignees
-                    };
-                    let user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "technical", user.warehouseId);
-                    user_assignees.map((user)=>{sendNotification({
-                        purchaseOrderId: id,
-                        badge: 0,
-                        title: "Bạn có 1 tin nhắn mới",
-                        body: 'Có một đơn chờ chuyệt'
-                    }, user.username)});
-                    break;
-                case "technical":
-                    if (user.id = listAssignees.technical.id  && listAssignees.technical.status == "pending"){
-                        listAssignees.technical["status"] = (status == 'true')?"accepted":"rejected";
-                        listAssignees.technical["dateTime"] = new Date();
                     }
-                    else
-                        return res.status(400).json({});
-                    if (status != 'true'){
-                        output = {
-                            status: "rejected",
-                        };
+                } else {
+                    if (!assignees) return res.status(403).json(null);
+                    listAssignees.push({user: assignees, status: PURCHASE_ORDER_STATUS.PENDING, dateTime: new Date()});
+                    output = {
+                        assignees: listAssignees,
+                        approval: assignees
+                    };
+                    let user_assignees = await User.find({_id: assignees});
+                    user_assignees.map(async (user) => {
+                        await sendNotification({
+                            purchaseOrderId: id,
+                            badge: 0,
+                            title: "Bạn có 1 tin nhắn mới",
+                            body: 'Có một đơn chờ chuyệt'
+                        }, user.username)
+                    });
+                }
+            } else {
+                let userIdApproval = 0;
+                for (let i = 0; i < listAssignees.length; i++) {
+                    if (listAssignees[i].user == user.id) {
+                        listAssignees[i].status = (status == 'true') ? PURCHASE_ORDER_STATUS.ACCEPTED : PURCHASE_ORDER_STATUS.REJECTED;
+                        listAssignees[i].dateTime = new Date();
+                        userIdApproval = i;
                         break;
                     }
-                    listAssignees.stocker = {id: assignees, status: "pending", dateTime: new Date()}
+                }
+                if (user.role == ROLE.STOCKER) {
                     output = {
+                        status: (status == 'true') ? PURCHASE_ORDER_STATUS.ACCEPTED : PURCHASE_ORDER_STATUS.REJECTED,
                         assignees: listAssignees
                     };
-                    user_assignees = await User.findByIdAndRoleAndWarehouseId(assignees, "stocker", user.warehouseId);
-                    user_assignees.map((user)=>{sendNotification({
-                        purchaseOrderId: id,
-                        badge: 0,
-                        title: "Bạn có 1 tin nhắn mới",
-                        body: 'Có một đơn chờ chuyệt'
-                    }, user.username)});
-                    break;
-                case "stocker":
-                    if (user.id = listAssignees.stocker.id  && listAssignees.stocker.status == "pending"){
-                        listAssignees.stocker["status"] = (status == 'true')?"accepted":"rejected";
-                        listAssignees.stocker["dateTime"] = new Date();
-                    }
-                    else
-                        return res.status(400).json({});
-                    output = {
-                        status: (status == 'true')?"accepted":"rejected",
-                        assignees: listAssignees
-                    };
-                    if(status){
-                        item.products.map( async (product)=>{
+                    if (status) {
+                        item.products.map((product) => {
                             let statistical = product.product.statistical;
                             let calculator = statistical[product.productType] - product.quantity;
-                            if(calculator<0) return res.status(400).json({});
-                            statistical[product.productType]-=product.quantity;
-                            await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
+                            if (calculator < 0) return res.status(404).json({errorMessage: "Số lượng không "});
+                        });
+                        item.products.map(async (product) => {
+                            let statistical = product.product.statistical;
+                            statistical[product.productType] -= product.quantity;
+                            await Product.update({_id: product.product._id}, {$set: {statistical: statistical}});
                         });
                     }
-                    break;
+                }else {
+                    output = {
+                        assignees: listAssignees,
+                        approval: listAssignees[userIdApproval+1].user
+                    };
+                    let user_assignees = await User.find({_id: listAssignees[userIdApproval+1].user});
+                    user_assignees.map(async (user) => {
+                        await sendNotification({
+                            purchaseOrderId: id,
+                            badge: 0,
+                            title: "Bạn có 1 tin nhắn mới",
+                            body: 'Có một đơn chờ chuyệt'
+                        }, user.username)
+                    });
+                }
             }
-            console.log(assignees);
             await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId}, output);
-            }
-        else{
-            if(status){
-                item.products.map( async (product)=>{
+        } else {
+            if (user.role !== ROLE.STOCKER)
+                return res.status(403).json(null);
+            if (status) {
+                item.products.map(async (product) => {
                     let statistical = product.product.statistical;
-                    // else{
-                    //     // let calculator = statistical[product.productType] - product.quantity;
-                    //     // if(calculator<0) return res.status(400).json({});
-                    //     // statistical[product.productType]-=product.quantity;
-                    // }
-                    statistical[product.productType]+=product.quantity;
-                    await Product.update({_id: product.product._id},{$set: {statistical: statistical}});
+                    statistical[product.productType] += product.quantity;
+                    await Product.update({_id: product.product._id}, {$set: {statistical: statistical}});
                 });
             }
             await PurchaseOrder.update({_id: id, warehouseId: user.warehouseId},
                 {
-                    status: (status == 'true')?"accepted":"rejected",
+                    status: (status == 'true') ? "accepted" : "rejected",
                     updatedBy: user.id
                 });
         }
 
-        return res.status(204).json(item);
+        return res.status(200).json(item);
     } catch (err) {
         return next(err);
     }
 }
-async function getAssignees(req, res, next){
 
-    const { PurchaseOrder, User } = req.app.get('models');
+async function getAssignees(req, res, next) {
+
+    const {PurchaseOrder, User} = req.app.get('models');
     const id = get(req.query, 'id', null);
     const user = req.user;
     let role = "repair";
     try {
-        if (id){
+        if (id) {
             const item = await PurchaseOrder.findById(id);
             if (!item) return res.status(404).json({});
         }
@@ -351,6 +347,7 @@ async function getAssignees(req, res, next){
         return next(err);
     }
 }
+
 const PurchaseOrderController = {
     find,
     findOne,

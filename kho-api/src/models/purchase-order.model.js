@@ -15,7 +15,28 @@ const PurchaseOrderSchema = new mongoose.Schema({
         default: 0,
         min: 0,
     },
-    assignees: {},
+    assignees: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            default: null,
+        },
+        status: {
+            type: String,
+            enum: values(PURCHASE_ORDER_STATUS),
+            required: true,
+            default: PURCHASE_ORDER_STATUS.PENDING,
+        },
+        dateTime: {
+            type: Date,
+            required: true,
+        }
+    }],
+    approval: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+    },
     managerDepartment: String,
     products: [{
         product: {

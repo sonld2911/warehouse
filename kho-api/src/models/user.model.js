@@ -98,11 +98,11 @@ UserSchema.statics.findByEmail = function findByEmail(email) {
 UserSchema.statics.findByUsername = function findByUsername(username) {
     return this.findOne({ username });
 };
-UserSchema.statics.findByRoleAndWarehouseId = function findBytrungtn(role, warehouseId) {
+UserSchema.statics.findByRoleAndWarehouseId = function findByRoleAndWarehouseId(role, warehouseId) {
     return this.find({role: role, warehouseId:warehouseId});
 };
-UserSchema.statics.findByIdAndRoleAndWarehouseId = function findBytrungtn(id, role, warehouseId) {
-    return this.find({id: id, role: role, warehouseId:warehouseId});
+UserSchema.statics.findByIdAndRoleAndWarehouseId = function findByIdAndRoleAndWarehouseId(id, role, warehouseId) {
+    return this.find({_id: id, role: role, warehouseId:warehouseId});
 };
 UserSchema.set('toJSON', {
     transform: function (doc, ret) {
