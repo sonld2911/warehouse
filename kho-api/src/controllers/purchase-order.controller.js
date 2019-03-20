@@ -70,12 +70,12 @@ async function sendNotification(data, to = "notifications") {
 }
 
 async function invoiceManagement(req, res, next) {
-    const {PurchaseOrder, User} = req.app.get('models');
+    const {PurchaseOrder} = req.app.get('models');
     const user = req.user;
     try {
         const items = await PurchaseOrder.aggregate([
-            {$match: {warehouseId: user.warehouseId}},
-            {$project: {status: 1, orderType: 1}}
+            {$match: {warehouseId: user.warehouseId, createdBy: user._id}},
+            {$project: {status: 1, orderType: 1, subtotal: 1, inputDate: 1, outputDate: 1}}
         ]);
         let data = {
             in: {
@@ -87,10 +87,17 @@ async function invoiceManagement(req, res, next) {
                 pending: 0,
                 accepted: 0,
                 rejected: 0,
-            }
+            },
+            itemsIn: [],
+            itemsOut: [],
         };
         items.map(item => {
             data[item.orderType][item.status] += 1;
+            if (item.orderType == "in") {
+                data.itemsIn.push(item)
+            }else {
+                data.itemsOut.push(item)
+            }
         });
         if (!items) {
             return next('error 404 product not found');
