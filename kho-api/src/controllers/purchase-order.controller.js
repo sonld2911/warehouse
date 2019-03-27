@@ -75,7 +75,8 @@ async function invoiceManagement(req, res, next) {
     try {
         const items = await PurchaseOrder.aggregate([
             {$match: {warehouseId: user.warehouseId, createdBy: user._id}},
-            {$project: {status: 1, orderType: 1, subtotal: 1, inputDate: 1, outputDate: 1}}
+            {$project: {status: 1, orderType: 1, subtotal: 1, inputDate: 1, outputDate: 1}},
+            { $sort : { inputDate : 1,  outputDate : 1} }
         ]);
         let data = {
             in: {
@@ -277,7 +278,7 @@ async function invoiceApproval(req, res, next) {
                         item.products.map((product) => {
                             let statistical = product.product.statistical;
                             let calculator = statistical[product.productType] - product.quantity;
-                            if (calculator < 0) return res.status(404).json({errorMessage: "Số lượng không "});
+                            if (calculator < 0) return res.status(400).json({errorMessage: "Số lượng không "});
                         });
                         item.products.map(async (product) => {
                             let statistical = product.product.statistical;

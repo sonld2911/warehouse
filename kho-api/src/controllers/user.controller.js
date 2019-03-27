@@ -6,8 +6,8 @@ import {
     InternalServerError,
     UnprocessableEntity
 } from 'throw.js';
-import { get, isEmpty } from 'lodash';
-import { DEFAULT_PAGE_LIMIT } from '../enums';
+import {get, isEmpty} from 'lodash';
+import {DEFAULT_PAGE_LIMIT} from '../enums';
 
 async function list(req, res, next) {
     const {User} = req.app.get('models');
@@ -17,7 +17,7 @@ async function list(req, res, next) {
 
     const filter = JSON.parse(get(req.query, 'filter', '{}'));
 
-    const query = {};
+    const query = {isActive: true};
 
     if (filter.username) {
         query.username = {'$regex': filter.username};
@@ -49,12 +49,13 @@ async function list(req, res, next) {
 async function create(req, res, next) {
     const data = req.body;
     const {User} = req.app.get('models');
-
+    const reqUser = req.user;
     try {
         if (isEmpty(data.warehouseId)) {
             delete data.warehouseId;
         }
-
+        data.createdBy = reqUser._id;
+        data.updatedBy = reqUser._id;
         const user = await User.create(data);
 
         return res.json(user);
@@ -67,7 +68,7 @@ async function update(req, res, next) {
     const {id} = req.params;
     const data = req.body;
     const {User} = req.app.get('models');
-
+    const reqUser = req.user;
     try {
         const user = await User.findById(id);
 
@@ -84,7 +85,7 @@ async function update(req, res, next) {
         }
 
         user.set({...data});
-
+        user.set({updatedBy: reqUser.id});
         await user.save();
 
         return res.json(user);
@@ -96,10 +97,10 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
     const {id} = req.params;
     const {User} = req.app.get('models');
-
+    const user = req.user;
     try {
-        await User.findByIdAndDelete(id);
-
+        // await User.findByIdAndDelete(id);
+        await User.update({_id: id}, {isActive: false, updatedBy: user.id});
         return res.status(204).json({});
     } catch (err) {
         return next(new InternalServerError());
@@ -107,8 +108,8 @@ async function remove(req, res, next) {
 }
 
 async function findOne(req, res, next) {
-    const { id } = req.params;
-    const { User } = req.app.get('models');
+    const {id} = req.params;
+    const {User} = req.app.get('models');
 
     try {
         const user = await User.findById(id);

@@ -49,6 +49,16 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+    },
+    updatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+    }
 }, { timestamps: true });
 
 UserSchema.plugin(mongoosePaginatePlugin);
@@ -143,6 +153,8 @@ function mappingResponse(props = {}) {
         created_at: props.createdAt,
         updated_at: props.updatedAt,
         warehouse: props.warehouseId,
+        createdBy: props.createdBy,
+        updatedBy: props.updatedBy,
     };
 
     return data;

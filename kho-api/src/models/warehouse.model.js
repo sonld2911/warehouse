@@ -11,6 +11,20 @@ const WarehouseSchema = new Schema({
         required: true,
         trim: true,
     },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+    },
+    updatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+    }
 }, { timestamps: true });
 
 WarehouseSchema.plugin(mongoosePaginatePlugin);
@@ -27,6 +41,9 @@ function mappingResponse(props) {
         name: props.name,
         created_at: props.createdAt,
         updated_at: props.updatedAt,
+        is_active: props.isActive,
+        createdBy: props.createdBy,
+        updatedBy: props.updatedBy,
     };
 }
 

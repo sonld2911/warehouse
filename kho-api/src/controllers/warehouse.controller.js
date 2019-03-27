@@ -1,16 +1,16 @@
 'use strict';
 
-import { DEFAULT_PAGE_LIMIT } from '../enums';
-import { get } from 'lodash';
+import {DEFAULT_PAGE_LIMIT} from '../enums';
+import {get} from 'lodash';
 import HTTP_STATUS from 'http-status';
 
 async function list(req, res, next) {
-    const { Warehouse } = req.app.get('models');
+    const {Warehouse} = req.app.get('models');
 
     const limit = parseInt(get(req.query, 'limit', DEFAULT_PAGE_LIMIT));
     const page = parseInt(get(req.query, 'page', 1));
 
-    const query = {};
+    const query = {isActive: true,};
 
     const options = {
         page,
@@ -34,11 +34,13 @@ async function list(req, res, next) {
 }
 
 async function create(req, res, next) {
-    const { Warehouse } = req.app.get('models');
+    const {Warehouse} = req.app.get('models');
     const data = req.body;
-
+    const user = req.user;
     try {
         // TODO: validate before create
+        data.createdBy = user.id;
+        data.updatedBy = user.id;
         const warehouse = await Warehouse.create(data);
 
         // TODO: handle response content
@@ -50,10 +52,10 @@ async function create(req, res, next) {
 }
 
 async function update(req, res, next) {
-    const { Warehouse } = req.app.get('models');
-    const { id } = req.params;
+    const {Warehouse} = req.app.get('models');
+    const {id} = req.params;
     const data = req.body;
-
+    const user = req.user;
     try {
         const warehouse = await Warehouse.findById(id);
 
@@ -64,7 +66,7 @@ async function update(req, res, next) {
 
         // TODO: validate data before save
         warehouse.set({...data});
-
+        warehouse.set({updatedBy: user.id});
         await warehouse.save();
 
         // TODO: handle response
@@ -76,12 +78,12 @@ async function update(req, res, next) {
 }
 
 async function remove(req, res, next) {
-    const { Warehouse } = req.app.get('models');
-    const { id } = req.params;
-
+    const {Warehouse} = req.app.get('models');
+    const {id} = req.params;
+    const user = req.user;
     try {
-        await Warehouse.findByIdAndDelete(id);
-
+        // await Warehouse.findByIdAndDelete(id);
+        await Warehouse.update({_id: id}, {isActive: false, updatedBy: user.id});
         return res.status(HTTP_STATUS.NO_CONTENT).json({});
     } catch (err) {
         // TODO: handle error response
