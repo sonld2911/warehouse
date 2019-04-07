@@ -74,7 +74,7 @@ async function invoiceManagement(req, res, next) {
     const user = req.user;
     try {
         const items = await PurchaseOrder.aggregate([
-            {$match: {warehouseId: user.warehouseId, createdBy: user._id}},
+            {$match: {warehouseId: user.warehouseId}},
             {$project: {status: 1, orderType: 1, subtotal: 1, inputDate: 1, outputDate: 1}},
             { $sort : { inputDate : 1,  outputDate : 1} }
         ]);
