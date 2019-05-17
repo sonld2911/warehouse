@@ -22,6 +22,16 @@ const ProductSchema = new mongoose.Schema({
         trim: true,
         default: '',
     },
+    location: {
+        type: String,
+        trim: true,
+        default: '',
+    },
+    expiryDate: {
+        type: String,
+        trim: true,
+        default: '',
+    },
     technicalSpecifications: {
         type: String,
         trim: true,
