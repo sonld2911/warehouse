@@ -97,6 +97,8 @@ async function update(req, res, next) {
         const data = omitBy({
             code: get(req.body, 'code'),
             name: get(req.body, 'name'),
+            location: get(req.body, 'location'),
+            expiryDate: get(req.body, 'expiryDate'),
             description: get(req.body, 'description'),
             manufacturer: get(req.body, 'manufacturer'),
             machinePart: get(req.body, 'machinePart'),
